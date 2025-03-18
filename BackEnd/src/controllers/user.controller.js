@@ -92,7 +92,7 @@ const deleteUser = AsyncHandler(async (req, res) => {
     await destroyImage(user.avatar);
   }
 
-   await user.deleteOne();
+  await user.deleteOne();
 
   let userResponse = {
     _id: user._id,
@@ -174,20 +174,103 @@ const updateUser = AsyncHandler(async (req, res) => {
     }
   }
 
-
   if (password) {
-    user.password =password;
+    user.password = password;
   }
-  
 
   user = await user.save();
 
   res.status(200).json(new ApiResponse(200, user, "User updated successfully"));
 });
 
-const getAllUsers=AsyncHandler(async (req,res)=>{
-  const users=await User.find().select("-password -refreshToken");
-  res.status(200).json(new ApiResponse(200, users, "Users retrieved successfully"));
+const getAllUsers = AsyncHandler(async (req, res) => {
+  const users = await User.find().select("-password -refreshToken");
+  res
+    .status(200)
+    .json(new ApiResponse(200, users, "Users retrieved successfully"));
 });
 
-export { registerUser, deleteUser, getUser, updateUser, getAllUsers };
+const generateAccessTokenAndRefreshToken = async (userId) => {
+  try {
+    if (!userId) {
+      throw new ApiError(400, "User ID is required");
+    }
+    const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+    user.refreshToken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    return { accessToken, refreshToken };
+  } catch (error) {
+    throw new ApiError(
+      500,
+      "Failed to generate access token and refresh token"
+    );
+  }
+};
+const loginUser = AsyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
+  if (!username && !email) {
+    throw new ApiError(400, "Username or Email is required");
+  }
+  if (!password) {
+    throw new ApiError(400, "Password is required");
+  }
+  const user = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (!user) {
+    throw new ApiError(404, "User Not Found");
+  }
+
+  const isMatched = await user.comparePassword(password);
+  if (!isMatched) {
+    throw new ApiError(401, "Invalid Password");
+  }
+  const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(
+    user._id
+  );
+  const loginUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
+
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, option)
+    .cookie("refreshToken", refreshToken, option)
+    .json(new ApiResponse(200, { user: loginUser, accessToken, refreshToken }));
+});
+const logoutUser = AsyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      refreshToken: undefined,
+    },
+    {
+      new: true,
+    }
+  );
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
+  res
+    .status(200)
+    .clearCookie("accessToken", option)
+    .clearCookie("refreshToken", option)
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
+});
+export {
+  registerUser,
+  deleteUser,
+  getUser,
+  updateUser,
+  getAllUsers,
+  loginUser,
+  logoutUser,
+};
