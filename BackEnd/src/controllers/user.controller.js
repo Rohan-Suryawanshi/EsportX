@@ -265,6 +265,46 @@ const logoutUser = AsyncHandler(async (req, res) => {
     .clearCookie("refreshToken", option)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
+
+
+const refreshAccessToken = AsyncHandler(async (req, res) => {
+  const token =
+    req.cookies?.refreshToken || req.header.authorization?.split(" ")[1];
+  if (!token) {
+    throw new ApiError(401, "Access Token Is required");
+  }
+  try {
+    const decodedToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+
+    const user = await User.findById(decodedToken._id).select("-password");
+    if (!user) {
+      throw new ApiError(401, "Invalid Access Token");
+    }
+    if (token !== user?.refreshToken) {
+      throw new ApiError(401, "Refresh Token is expired");
+    }
+    const option = {
+      httpOnly: true,
+      secure: true,
+    };
+    const { newAccessToken, newRefreshToken } =
+      await generateAccessAndRefreshToken(user._id);
+
+    res
+      .status(200)
+      .cookie("accessToken", newAccessToken, option)
+      .cookie("refreshToken", newRefreshToken, option)
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken: newAccessToken, refreshToken: newRefreshToken },
+          "Access Token Refreshed"
+        )
+      );
+  } catch (error) {
+    throw new ApiError(401, error?.message || "Invalid Access Token");
+  }
+});
 export {
   registerUser,
   deleteUser,
@@ -273,4 +313,6 @@ export {
   getAllUsers,
   loginUser,
   logoutUser,
+  refreshAccessToken
+
 };

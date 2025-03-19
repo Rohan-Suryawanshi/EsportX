@@ -5,6 +5,7 @@ import {
   getUser,
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
   updateUser,
 } from "../controllers/user.controller.js";
@@ -20,4 +21,5 @@ router.put("/:id", upload.single("avatar"), updateUser);
 router.get("/", getAllUsers);
 router.post("/login",loginUser);
 router.post("/logout",verifyJWT,logoutUser);
+router.post("/refresh-token",refreshAccessToken)
 export default router;
