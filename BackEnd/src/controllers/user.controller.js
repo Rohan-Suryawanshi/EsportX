@@ -228,9 +228,8 @@ const loginUser = AsyncHandler(async (req, res) => {
   if (!isMatched) {
     throw new ApiError(401, "Invalid Password");
   }
-  const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(
-    user._id
-  );
+  const { accessToken, refreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
   const loginUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
@@ -265,7 +264,6 @@ const logoutUser = AsyncHandler(async (req, res) => {
     .clearCookie("refreshToken", option)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
-
 
 const refreshAccessToken = AsyncHandler(async (req, res) => {
   const token =
@@ -305,6 +303,39 @@ const refreshAccessToken = AsyncHandler(async (req, res) => {
     throw new ApiError(401, error?.message || "Invalid Access Token");
   }
 });
+
+const changeCurrentUserPassword = AsyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(401, "User is not authenticated");
+  }
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    throw new ApiError(400, "Current Password and New Password are required");
+  }
+  if (currentPassword === newPassword) {
+    throw new ApiError(400,"New password cannot be the same as the current password");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const isMatched = await user.comparePassword(currentPassword);
+  if (!isMatched) {
+    throw new ApiError(401, "Invalid Current Password");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+  const loginUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+  );
+  res
+    .status(200)
+    .json(new ApiResponse(200, loginUser, "Password updated successfully"));
+});
+
 export {
   registerUser,
   deleteUser,
@@ -313,6 +344,6 @@ export {
   getAllUsers,
   loginUser,
   logoutUser,
-  refreshAccessToken
-
+  refreshAccessToken,
+  changeCurrentUserPassword,
 };
