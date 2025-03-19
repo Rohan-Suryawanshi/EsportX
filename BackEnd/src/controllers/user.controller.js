@@ -346,49 +346,91 @@ const getCurrentUser = AsyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = AsyncHandler(async (req, res) => {
-  const { username, email } = req.body;
+  let { username, email } = req.body;
+
   if (!username || !email) {
     throw new ApiError(400, "Username and Email are required");
   }
 
-  if (username && req.user.username !== username.trim()) {
+  let newUsername = username.toLowerCase().trim();
+  let newEmail = email.toLowerCase().trim();
+
+  // Check if the username is changing
+  if (req.user.username !== newUsername) {
     const existingUser = await User.findOne({
-      username: username.toLowerCase().trim(),
-      _id: { $ne: req.user._id },
+      username: newUsername,
+      _id: { $ne: req.user._id }, // Ensure it's not the same user
     });
-    if (!existingUser) {
-      username = username.toLowerCase().trim();
-    } else {
+
+    if (existingUser) {
       throw new ApiError(409, "Username already exists");
     }
   }
-  if (email && req.user.email !== email.trim()) {
+
+  // Check if the email is changing
+  if (req.user.email !== newEmail) {
     const existingUser = await User.findOne({
-      email: email.toLowerCase().trim(),
+      email: newEmail,
       _id: { $ne: req.user._id },
     });
-    if (!existingUser) {
-      email = email.toLowerCase().trim();
-    } else {
+
+    if (existingUser) {
       throw new ApiError(409, "Email already exists");
     }
   }
-  const updatedUser=await User.findByIdAndUpdate(
+
+  // Update user details
+  const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
-    {
-      $set: {
-        username,
-        email,
-      },
-    },
+    { $set: { username: newUsername, email: newEmail } },
     { new: true }
   ).select("-password -refreshToken");
 
   res
-   .status(200)
-   .json(new ApiResponse(200, updatedUser, "User Account details updated successfully"));
-
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        updatedUser,
+        "User account details updated successfully"
+      )
+    );
 });
+
+
+const updateAvatarImage = AsyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  if (!userId) {
+    throw new ApiError(401, "User is not authenticated");
+  }
+
+  const avatarLocalPath = req.file?.path;
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar image is required");
+  }
+
+  const avatar = await uploadToCloudinary(avatarLocalPath);
+  if (!avatar?.url) {
+    throw new ApiError(500, "Failed to upload avatar image to Cloudinary");
+  }
+
+  // Delete old avatar if exists
+  if (req.user.avatar) {
+    await destroyImage(req.user.avatar);
+  }
+
+  // Update user with new avatar URL
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $set: { avatar: avatar.url } },
+    { new: true }
+  ).select("-password -refreshToken");
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, updatedUser, "Avatar Updated Successfully"));
+});
+
 export {
   registerUser,
   deleteUser,
@@ -401,4 +443,5 @@ export {
   changeCurrentUserPassword,
   getCurrentUser,
   updateAccountDetails,
+  updateAvatarImage,
 };
