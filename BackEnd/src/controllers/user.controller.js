@@ -314,7 +314,10 @@ const changeCurrentUserPassword = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Current Password and New Password are required");
   }
   if (currentPassword === newPassword) {
-    throw new ApiError(400,"New password cannot be the same as the current password");
+    throw new ApiError(
+      400,
+      "New password cannot be the same as the current password"
+    );
   }
 
   const user = await User.findById(userId);
@@ -334,12 +337,58 @@ const changeCurrentUserPassword = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password updated successfully"));
 });
 
-const getCurrentUser=AsyncHandler(async (req,res)=>{
+const getCurrentUser = AsyncHandler(async (req, res) => {
   req
-  .status(200)
-  .json(new ApiResponse(200, req.user, "Current User retrieved successfully"));
-  
-})
+    .status(200)
+    .json(
+      new ApiResponse(200, req.user, "Current User retrieved successfully")
+    );
+});
+
+const updateAccountDetails = AsyncHandler(async (req, res) => {
+  const { username, email } = req.body;
+  if (!username || !email) {
+    throw new ApiError(400, "Username and Email are required");
+  }
+
+  if (username && req.user.username !== username.trim()) {
+    const existingUser = await User.findOne({
+      username: username.toLowerCase().trim(),
+      _id: { $ne: req.user._id },
+    });
+    if (!existingUser) {
+      username = username.toLowerCase().trim();
+    } else {
+      throw new ApiError(409, "Username already exists");
+    }
+  }
+  if (email && req.user.email !== email.trim()) {
+    const existingUser = await User.findOne({
+      email: email.toLowerCase().trim(),
+      _id: { $ne: req.user._id },
+    });
+    if (!existingUser) {
+      email = email.toLowerCase().trim();
+    } else {
+      throw new ApiError(409, "Email already exists");
+    }
+  }
+  const updatedUser=await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        username,
+        email,
+      },
+    },
+    { new: true }
+  ).select("-password -refreshToken");
+
+  res
+   .status(200)
+   .json(new ApiResponse(200, updatedUser, "User Account details updated successfully"));
+
+});
 export {
   registerUser,
   deleteUser,
@@ -351,4 +400,5 @@ export {
   refreshAccessToken,
   changeCurrentUserPassword,
   getCurrentUser,
+  updateAccountDetails,
 };
