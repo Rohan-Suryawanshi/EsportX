@@ -328,14 +328,18 @@ const changeCurrentUserPassword = AsyncHandler(async (req, res) => {
   }
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
-  const loginUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
+
   res
     .status(200)
-    .json(new ApiResponse(200, loginUser, "Password updated successfully"));
+    .json(new ApiResponse(200, {}, "Password updated successfully"));
 });
 
+const getCurrentUser=AsyncHandler(async (req,res)=>{
+  req
+  .status(200)
+  .json(new ApiResponse(200, req.user, "Current User retrieved successfully"));
+  
+})
 export {
   registerUser,
   deleteUser,
@@ -346,4 +350,5 @@ export {
   logoutUser,
   refreshAccessToken,
   changeCurrentUserPassword,
+  getCurrentUser,
 };
