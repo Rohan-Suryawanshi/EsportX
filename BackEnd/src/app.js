@@ -20,13 +20,14 @@ app.use(morgan('dev'));
 import userRoutes from './routes/user.routes.js';
 import gameRoutes from './routes/game.routes.js';
 import bannerRoutes from "./routes/banner.routes.js";
-
+import transactionRoutes from "./routes/transaction.routes.js";
 
 
 //http://localhost:8000/api/v1/users/register
 app.use('/api/v1/users', userRoutes);
 app.use("/api/v1/games", gameRoutes);
 app.use("/api/v1/banners", bannerRoutes);
+app.use("/api/v1/transactions", transactionRoutes);
 
 //Error Handling middleware
 app.use((err, req, res, next) => {
