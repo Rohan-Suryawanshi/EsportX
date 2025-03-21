@@ -18,7 +18,7 @@ const createTransaction = AsyncHandler(async (req, res) => {
     type,
   });
   const savedTransaction = await newTransaction.save();
-  req
+  res
     .status(200)
     .json(
       new ApiResponse(200, savedTransaction, "Transaction created successfully")
@@ -26,10 +26,10 @@ const createTransaction = AsyncHandler(async (req, res) => {
 });
 
 const getAllTransactions = AsyncHandler(async (req, res) => {
-  const {status,type}=req.query;
-  let filter={};
-  if (req.users?.role !== "Admin") {
-    filter.userId= req.user?._id;
+  const { status, type } = req.query;
+  let filter = {};
+  if (req.user?.role !== "Admin") {
+    filter.userId = req.user?._id;
   }
   if (status) {
     filter.status = status;
@@ -37,46 +37,123 @@ const getAllTransactions = AsyncHandler(async (req, res) => {
   if (type) {
     filter.type = type;
   }
-  const transactions=await Transaction.find(filter).populate("userId","username email").sort({createdAt:-1});
-  res.status(200).json(new ApiResponse(200, transactions, "Transactions fetched successfully"));
+  const transactions = await Transaction.find(filter)
+    .populate("userId", "username email")
+    .sort({ createdAt: -1 });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, transactions, "Transactions fetched successfully")
+    );
 });
 
-const getTransactionById=AsyncHandler(async (req,res)=>{
-  const transactionId=req.params.id;
-  const transaction=await Transaction.findById(transactionId).populate("userId","username email");
-  if(!transaction){
-    throw new ApiError(404,"Transaction not found");
+const getTransactionById = AsyncHandler(async (req, res) => {
+  const transactionId = req.params.id;
+  const transaction = await Transaction.findById(transactionId).populate(
+    "userId",
+    "username email"
+  );
+  if (!transaction) {
+    throw new ApiError(404, "Transaction not found");
   }
-  res.status(200).json(new ApiResponse(200, transaction, "Transaction fetched successfully"));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, transaction, "Transaction fetched successfully")
+    );
 });
 
-const updateTransactionStatus=AsyncHandler(async (req,res)=>{
-  const transactionId=req.params.id;
-  const {status}=req.body;
-  if(!transactionId){
-    throw new ApiError(400,"Transaction ID is required");
+const updateTransactionStatus = AsyncHandler(async (req, res) => {
+  const transactionId = req.params.id;
+  const { status } = req.body;
+  if (!transactionId) {
+    throw new ApiError(400, "Transaction ID is required");
   }
-  if(!status){
-    throw new ApiError(400,"Status is required");
+  if (!status) {
+    throw new ApiError(400, "Status is required");
   }
-  const transaction=await Transaction.findByIdAndUpdate(transactionId,{status},{new:true}).populate("userId","username email");
-  if(!transaction){
-    throw new ApiError(404,"Transaction not found");
+  const transaction = await Transaction.findByIdAndUpdate(
+    transactionId,
+    { status },
+    { new: true }
+  ).populate("userId", "username email");
+  if (!transaction) {
+    throw new ApiError(404, "Transaction not found");
   }
-  res.status(200).json(new ApiResponse(200, transaction, "Transaction status updated successfully"));
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        transaction,
+        "Transaction status updated successfully"
+      )
+    );
 });
 
-const deleteTransaction=AsyncHandler(async (req,res)=>{
-  const transactionId=req.params.id;
-  if(!transactionId){
-    throw new ApiError(400,"Transaction ID is required");
+const deleteTransaction = AsyncHandler(async (req, res) => {
+  const transactionId = req.params.id;
+  if (!transactionId) {
+    throw new ApiError(400, "Transaction ID is required");
   }
-  const transaction=await Transaction.findByIdAndDelete(transactionId);
-  if(!transaction){
-    throw new ApiError(404,"Transaction not found");
+  const transaction = await Transaction.findByIdAndDelete(transactionId);
+  if (!transaction) {
+    throw new ApiError(404, "Transaction not found");
   }
-  res.status(200).json(new ApiResponse(200, {}, "Transaction deleted successfully"));
-})
+  res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Transaction deleted successfully"));
+});
+
+const getUserTransactions = AsyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  if (!userId) {
+    throw new ApiError(400, "User ID is required");
+  }
+  const transactions = await Transaction.find({ userId })
+    .populate("userId", "username email")
+    .sort({ createdAt: -1 });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        transactions,
+        "User transactions fetched successfully"
+      )
+    );
+});
+
+const getPendingTransactions = AsyncHandler(async (req, res) => {
+  const transactions = await Transaction.find({ status: "pending" })
+    .populate("userId", "username email")
+    .sort({ createdAt: -1 });
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        transactions,
+        "Pending transactions fetched successfully"
+      )
+    );
+});
+const getTransactionSummary = AsyncHandler(async (req, res) => {
+  const summary = await Transaction.aggregate([
+    {
+      $group: {
+        _id: "$type",
+        totalAmount: { $sum: "$amount" },
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, summary, "Transaction summary fetched successfully")
+    );
+});
 
 export {
   createTransaction,
@@ -84,4 +161,7 @@ export {
   getTransactionById,
   updateTransactionStatus,
   deleteTransaction,
+  getUserTransactions,
+  getPendingTransactions,
+  getTransactionSummary,
 };
