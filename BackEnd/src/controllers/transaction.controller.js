@@ -48,6 +48,40 @@ const getTransactionById=AsyncHandler(async (req,res)=>{
     throw new ApiError(404,"Transaction not found");
   }
   res.status(200).json(new ApiResponse(200, transaction, "Transaction fetched successfully"));
+});
+
+const updateTransactionStatus=AsyncHandler(async (req,res)=>{
+  const transactionId=req.params.id;
+  const {status}=req.body;
+  if(!transactionId){
+    throw new ApiError(400,"Transaction ID is required");
+  }
+  if(!status){
+    throw new ApiError(400,"Status is required");
+  }
+  const transaction=await Transaction.findByIdAndUpdate(transactionId,{status},{new:true}).populate("userId","username email");
+  if(!transaction){
+    throw new ApiError(404,"Transaction not found");
+  }
+  res.status(200).json(new ApiResponse(200, transaction, "Transaction status updated successfully"));
+});
+
+const deleteTransaction=AsyncHandler(async (req,res)=>{
+  const transactionId=req.params.id;
+  if(!transactionId){
+    throw new ApiError(400,"Transaction ID is required");
+  }
+  const transaction=await Transaction.findByIdAndDelete(transactionId);
+  if(!transaction){
+    throw new ApiError(404,"Transaction not found");
+  }
+  res.status(200).json(new ApiResponse(200, {}, "Transaction deleted successfully"));
 })
 
-export { createTransaction, getAllTransactions, getTransactionById };
+export {
+  createTransaction,
+  getAllTransactions,
+  getTransactionById,
+  updateTransactionStatus,
+  deleteTransaction,
+};
