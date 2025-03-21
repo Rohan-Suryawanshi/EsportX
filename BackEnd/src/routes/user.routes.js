@@ -11,7 +11,6 @@ import {
   registerUser,
   updateAccountDetails,
   updateAvatarImage,
-  updateUser,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
@@ -34,6 +33,6 @@ router.put("/avatar", verifyJWT, upload.single("avatar"), updateAvatarImage);
 router.get("/", verifyJWT, getAllUsers);
 router.delete("/:id", verifyJWT, deleteUser);
 router.get("/:id", verifyJWT, getUser);
-router.put("/:id", verifyJWT, upload.single("avatar"), updateUser);
-
+router.put("/update-image/:id",verifyJWT,upload.single("avatar"),updateAvatarImage);
+router.put("/update-details/:id", verifyJWT, updateAccountDetails);
 export default router;

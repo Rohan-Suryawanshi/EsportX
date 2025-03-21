@@ -124,65 +124,6 @@ const getUser = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "User retrieved successfully"));
 });
 
-const updateUser = AsyncHandler(async (req, res) => {
-  const userId = req.params.id;
-  if (!userId) {
-    throw new ApiError(400, "User ID is required");
-  }
-
-  const { username, email, password } = req.body;
-
-  let user = await User.findById(userId);
-  if (!user) {
-    throw new ApiError(404, "User not found");
-  }
-
-  let avatarPath = req.file ? req.file.path : "";
-  if (avatarPath) {
-    const uploadedAvatar = await uploadToCloudinary(avatarPath);
-    if (!uploadedAvatar?.url) {
-      throw new ApiError(500, "Failed to upload avatar image");
-    }
-    if (user.avatar) {
-      await destroyImage(user.avatar); // Delete old avatar
-    }
-    user.avatar = uploadedAvatar.url;
-  }
-
-  // Update username and email if provided
-  if (username && user.username !== username.trim()) {
-    const existingUser = await User.findOne({
-      username: username.toLowerCase().trim(),
-      _id: { $ne: userId },
-    });
-    if (!existingUser) {
-      user.username = username.toLowerCase().trim();
-    } else {
-      throw new ApiError(409, "Username already exists");
-    }
-  }
-
-  if (email && user.email !== email.trim()) {
-    const existingEmail = await User.findOne({
-      email: email.toLowerCase().trim(),
-      _id: { $ne: userId },
-    });
-    if (!existingEmail) {
-      user.email = email.toLowerCase().trim();
-    } else {
-      throw new ApiError(409, "Email already exists");
-    }
-  }
-
-  if (password) {
-    user.password = password;
-  }
-
-  user = await user.save();
-
-  res.status(200).json(new ApiResponse(200, user, "User updated successfully"));
-});
-
 const getAllUsers = AsyncHandler(async (req, res) => {
   const users = await User.find().select("-password -refreshToken");
   res
@@ -435,7 +376,6 @@ export {
   registerUser,
   deleteUser,
   getUser,
-  updateUser,
   getAllUsers,
   loginUser,
   logoutUser,

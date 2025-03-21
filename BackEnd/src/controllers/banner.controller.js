@@ -1,6 +1,6 @@
 import { ApiError } from "../utils/ApiError.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
-import { Banner } from "../models/baners.model.js";
+import { Banner } from "../models/banners.model.js";
 import fs from "fs";
 import { uploadToCloudinary, destroyImage } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -44,55 +44,62 @@ const createBanner = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(201, banner, "Banner created successfully"));
 });
 
-// ✅ Update a Banner
-const updateBanner = AsyncHandler(async (req, res) => {
+const updateBannerDetails = AsyncHandler(async (req, res) => {
+  const bannerId = req.params.id;
+  let { title, link, isActive } = req.body;
+  if (!bannerId) {
+    throw new ApiError(400, "Banner ID is required");
+  }
+  if (!title) {
+    throw new ApiError(400, "Title is required");
+  }
+  link = link ?? "";
+  isActive = isActive ?? true;
+  const updatedBanner=await Banner.findByIdAndUpdate(
+    bannerId,
+    {
+      $set:{
+        title,
+        link,
+        isActive,
+      }
+    },{
+      new:true
+    }
+  )
+  res
+    .status(200)
+    .json(new ApiResponse(200, updatedBanner, "Banner Updated Successfully"));
+});
+
+const updateBannerImage=AsyncHandler(async (req,res)=>{
   const bannerId = req.params.id;
   if (!bannerId) throw new ApiError(400, "Banner ID is required");
+  let bannerLocalImagePath=req?.file?.path;
+  if (!bannerLocalImagePath) throw new ApiError(400, "Image is required");
 
-  const { title, link, isActive } = req.body;
-  let isUpdated = false;
-
-  const banner = await Banner.findById(bannerId);
-  if (!banner) throw new ApiError(404, "Banner not found");
-
-  if (title && banner.title !== title) {
-    banner.title = title;
-    isUpdated = true;
+  const uploadedBanner=await uploadToCloudinary(bannerLocalImagePath);
+  console.log(uploadedBanner);
+  if(!uploadedBanner?.url)
+  {
+    throw new ApiError(500, "Failed to upload banner image");
   }
-
-  if (link !== undefined && banner.link !== link) {
-    banner.link = link;
-    isUpdated = true;
-  }
-
-  if (typeof isActive === "boolean" && banner.isActive !== isActive) {
-    banner.isActive = isActive;
-    isUpdated = true;
-  }
-
-  let bannerImagePath = req?.file?.path || "";
-  if (bannerImagePath) {
-    const uploadedBannerImage = await uploadToCloudinary(bannerImagePath);
-    if (!uploadedBannerImage?.url)
-      throw new ApiError(500, "Failed to upload banner image");
-
-    if (banner.imageUrl) {
-      await destroyImage(banner.imageUrl);
+  const updatedBanner = await Banner.findByIdAndUpdate(
+    bannerId,
+    {
+      $set: {
+        imageUrl: uploadedBanner.url,
+      },
+    },
+    {
+      new: true,
     }
-
-    banner.imageUrl = uploadedBannerImage.url;
-    isUpdated = true;
-  }
-
-  if (isUpdated) {
-    await banner.save();
-    return res
-      .status(200)
-      .json(new ApiResponse(200, banner, "Banner updated successfully"));
-  }
-
-  res.status(200).send(new ApiResponse(200, banner, "No changes were made"));
-});
+  );
+  res
+  .status(200)
+  .json(new ApiResponse(200, updatedBanner, "Banner Image Updated Successfully"));
+  
+})
 
 const getBanner = AsyncHandler(async (req, res) => {
   const bannerId = req.params.id;
@@ -133,4 +140,11 @@ const deleteBanner = AsyncHandler(async (req, res) => {
     );
 });
 
-export { createBanner, updateBanner, getBanner, getAllBanners, deleteBanner };
+export {
+  createBanner,
+  getBanner,
+  getAllBanners,
+  deleteBanner,
+  updateBannerDetails,
+  updateBannerImage,
+};
