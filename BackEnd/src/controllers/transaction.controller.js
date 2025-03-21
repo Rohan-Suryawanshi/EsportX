@@ -41,4 +41,13 @@ const getAllTransactions = AsyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, transactions, "Transactions fetched successfully"));
 });
 
-export { createTransaction, getAllTransactions };
+const getTransactionById=AsyncHandler(async (req,res)=>{
+  const transactionId=req.params.id;
+  const transaction=await Transaction.findById(transactionId).populate("userId","username email");
+  if(!transaction){
+    throw new ApiError(404,"Transaction not found");
+  }
+  res.status(200).json(new ApiResponse(200, transaction, "Transaction fetched successfully"));
+})
+
+export { createTransaction, getAllTransactions, getTransactionById };
