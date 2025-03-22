@@ -12,13 +12,13 @@ const matchParticipantSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    gameUsername:{
-      type:String,
-      required:true
-    },
-    gameUID:{
+    gameUsername: {
       type: String,
-      required:true
+      required: true,
+    },
+    gameUID: {
+      type: String,
+      required: true,
     },
     isWinner: { type: Boolean, default: false },
     kills: { type: Number, default: 0 },
@@ -26,6 +26,18 @@ const matchParticipantSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+matchParticipantSchema.pre("save", async function (next) {
+  if (!this.isModified("kills")) return next();
+
+  const match = await mongoose.model("Match").findById(this.matchId);
+
+  if (!match) {
+    throw new Error("Match not found");
+  }
+
+  this.earnings = this.kills * match.perKill;
+  next();
+});
 
 export const MatchParticipant = mongoose.model(
   "MatchParticipant",
