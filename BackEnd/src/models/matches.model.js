@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
-mongooseAggregatePaginate
+
 const matchSchema = new mongoose.Schema(
   {
     gameId: {
@@ -19,7 +19,7 @@ const matchSchema = new mongoose.Schema(
       enum: ["UPCOMING", "ONGOING", "COMPLETE"],
       default: "UPCOMING",
     },
-    levelCriteria: { type: Number, default: 0 },
+    levelCriteria: { type: Number, default: 0,required:true },
   },
   { timestamps: true }
 );

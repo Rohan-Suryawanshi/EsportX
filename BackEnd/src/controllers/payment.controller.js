@@ -26,8 +26,6 @@ const createPayment = AsyncHandler(async (req, res) => {
 
 // Get all payments (Admin only)
 const getAllPayments = AsyncHandler(async (req, res) => {
-  if (req.user?.role !== "Admin") throw new ApiError(403, "Access denied");
-
   const payments = await Payment.find()
     .populate("userId", "username email")
     .sort({ createdAt: -1 });
@@ -63,7 +61,6 @@ const getUserPayments = AsyncHandler(async (req, res) => {
 
 // Update payment status (Admin only)
 const updatePaymentStatus = AsyncHandler(async (req, res) => {
-  if (req.user?.role !== "Admin") throw new ApiError(403, "Access denied");
 
   const paymentId = req.params.id;
   const { status } = req.body;
@@ -90,15 +87,14 @@ const updatePaymentStatus = AsyncHandler(async (req, res) => {
 
 // Delete a payment (Admin only)
 const deletePayment = AsyncHandler(async (req, res) => {
-  if (req.user?.role !== "Admin") throw new ApiError(403, "Access denied");
-
+  
   const paymentId = req.params.id;
   const deletedPayment = await Payment.findByIdAndDelete(paymentId);
   if (!deletedPayment) throw new ApiError(404, "Payment not found");
 
   res
     .status(200)
-    .json(new ApiResponse(200, {}, "Payment deleted successfully"));
+    .json(new ApiResponse(200, deletePayment, "Payment deleted successfully"));
 });
 
 export {

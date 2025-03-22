@@ -13,6 +13,6 @@ router.get("/:id", getGame);
 router.post("/create",upload.single('image'), createGame);
 router.delete("/:id", deleteGame);
 router.put("/:id",upload.single('image'), updateGame);
-router.get("/",getAllGames)
+router.get("/",getAllGames);
 
 export default router;
