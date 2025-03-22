@@ -83,7 +83,7 @@ const getMatchById = AsyncHandler(async (req, res) => {
   if (!match) {
     throw new ApiError(404, "Match Not Found");
   }
-  res.status(200).json(new ApiResponse(200, match, "MAtch Fetch Successfully"));
+  res.status(200).json(new ApiResponse(200, match, "Match Fetch Successfully"));
 });
 
 const updateMatchDetails = AsyncHandler(async (req, res) => {

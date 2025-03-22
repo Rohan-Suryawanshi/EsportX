@@ -14,6 +14,7 @@ const matchSchema = new mongoose.Schema(
     type: { type: String, enum: ["Solo", "Duo", "Squad"], required: true },
     map: { type: String, required: true },
     maxPlayers: { type: Number, required: true, default: 0 },
+    totalPlayersJoined: { type: Number, default: 0 },
     status: {
       type: String,
       enum: ["UPCOMING", "ONGOING", "COMPLETE"],
