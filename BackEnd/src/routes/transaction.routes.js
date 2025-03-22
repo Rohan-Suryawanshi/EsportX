@@ -9,17 +9,18 @@ import {
   getUserTransactions,
   updateTransactionStatus,
 } from "../controllers/transaction.controller.js";
+import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const router = Router();
 
 router.post("/", createTransaction);
-router.delete("/:id", deleteTransaction);
-router.put("/:id", updateTransactionStatus);
+router.delete("/:id",checkAdmin, deleteTransaction);
+router.put("/:id", checkAdmin,updateTransactionStatus);
 
-router.get("/pending-transaction", getPendingTransactions);
-router.get("/transaction-summary", getTransactionSummary);
-router.get("/user/:id", getUserTransactions);
-router.get("/:id", getTransactionById);
-router.get("/", getAllTransactions);
+router.get("/pending-transaction",checkAdmin, getPendingTransactions);
+router.get("/transaction-summary",checkAdmin, getTransactionSummary);
+router.get("/user/:id",checkAdmin, getUserTransactions);
+router.get("/:id",checkAdmin, getTransactionById);
+router.get("/",getAllTransactions);
 
 export default router;

@@ -14,6 +14,7 @@ import {
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
+import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.put("/avatar", verifyJWT, upload.single("avatar"), updateAvatarImage);
 // 🔹 Admin Routes
 router.get("/", verifyJWT, getAllUsers);
 router.delete("/:id", verifyJWT, deleteUser);
-router.get("/:id", verifyJWT, getUser);
+router.get("/:id", verifyJWT,checkAdmin, getUser);
 router.put("/update-image/:id",verifyJWT,upload.single("avatar"),updateAvatarImage);
 router.put("/update-details/:id", verifyJWT, updateAccountDetails);
 export default router;

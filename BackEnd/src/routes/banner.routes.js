@@ -8,14 +8,20 @@ import {
   updateBannerDetails,
 } from "../controllers/banner.controller.js";
 import {upload} from "../middlewares/multer.middleware.js"; // Middleware for image upload
+import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const router = Router();
 
-router.post("/", upload.single("bannerImage"), createBanner); 
+router.post("/",checkAdmin, upload.single("bannerImage"), createBanner); 
 router.get("/", getAllBanners);
-router.get("/:id", getBanner); 
-router.put("/update-image/:id", upload.single("bannerImage"),updateBannerImage); 
-router.put("/update-details/:id",updateBannerDetails)
-router.delete("/:id", deleteBanner); 
+router.get("/:id",getBanner); 
+router.put(
+  "/update-image/:id",
+  checkAdmin,
+  upload.single("bannerImage"),
+  updateBannerImage
+); 
+router.put("/update-details/:id", checkAdmin,updateBannerDetails);
+router.delete("/:id",checkAdmin, deleteBanner); 
 
 export default router;
