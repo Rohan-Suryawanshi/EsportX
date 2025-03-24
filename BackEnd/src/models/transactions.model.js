@@ -13,6 +13,17 @@ const transactionSchema = new mongoose.Schema(
       enum: ["Deposit", "Withdrawal", "Prize"],
       required: true,
     },
+    upiId: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: function (v) {
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+$/.test(v);
+            },
+            message: props => `${props.value} is not a valid UPI ID!`
+        }
+    },
     status: {
       type: String,
       enum: ["Pending", "Completed", "Failed"],
