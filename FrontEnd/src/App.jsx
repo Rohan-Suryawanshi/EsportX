@@ -1,9 +1,22 @@
 import './App.css'
+import AvailableGames from './components/AvailableGames/AvailableGames';
+import Footer from './components/Footer/Footer';
+import GamerReviews from './components/GamerReviews/GamerReviews';
+import HeroSection from './components/HeroSection/HeroSection';
+import HowItWorks from './components/HowItWorks/HowItWorks';
+import Navbar from './components/Navbar/Navbar';
+import StatsSection from './components/StatsSection/StatsSection';
 
 function App() {
   return (
      <>
-        <h1 className="bg-amber-100">Hello world!</h1>
+        <Navbar/>
+        <HeroSection/>
+        <AvailableGames/>
+        <HowItWorks/>
+        <GamerReviews/>
+        <StatsSection/>
+        <Footer/>
      </>
   );
 }
