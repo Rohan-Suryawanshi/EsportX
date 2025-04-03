@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 const Navbar = () => {
    const [isOpen, setIsOpen] = useState(false);
 
@@ -12,24 +12,10 @@ const Navbar = () => {
 
          {/* Desktop Menu */}
          <div className="hidden md:flex gap-8 font-medium">
-            <a
-               href="#"
-               className="hover:text-orange-500 transition duration-300"
-            >
-               Home
-            </a>
-            <a
-               href="#"
-               className="hover:text-orange-500 transition duration-300"
-            >
-               Games
-            </a>
-            <a
-               href="#"
-               className="hover:text-orange-500 transition duration-300"
-            >
-               Matches
-            </a>
+            <Link to="/" className="hover:text-orange-500 transition duration-300">Home</Link>
+            <Link to="/games" className="hover:text-orange-500 transition duration-300">Games</Link>
+            <Link to="/matches" className="hover:text-orange-500 transition duration-300">Matches</Link>
+            
             <a
                href="#"
                className="hover:text-orange-500 transition duration-300"
