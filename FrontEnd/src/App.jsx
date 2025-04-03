@@ -1,23 +1,24 @@
 import './App.css'
-import AvailableGames from './components/AvailableGames/AvailableGames';
-import Footer from './components/Footer/Footer';
-import GamerReviews from './components/GamerReviews/GamerReviews';
-import HeroSection from './components/HeroSection/HeroSection';
-import HowItWorks from './components/HowItWorks/HowItWorks';
-import Navbar from './components/Navbar/Navbar';
-import StatsSection from './components/StatsSection/StatsSection';
-
+import HomePage from './pages/Home';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MatchesPage from './pages/Matche';
+import GamePage from './pages/Game';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import ProfilePage from './pages/Profile';
+import ProfileDashboard from './pages/Profile';
 function App() {
   return (
-     <>
-        <Navbar/>
-        <HeroSection/>
-        <AvailableGames/>
-        <HowItWorks/>
-        <GamerReviews/>
-        <StatsSection/>
-        <Footer/>
-     </>
+     <BrowserRouter>
+      <Routes>
+         <Route path="/" element={<HomePage/>} />
+         <Route path="/games" element={<GamePage/>} />
+         <Route path="/matches" element={<MatchesPage/>} />
+         <Route path="/login" element={<LoginPage/>} />
+         <Route path="/register" element={<RegisterPage/>} />
+         <Route path="/profile" element={<ProfileDashboard/>} />
+      </Routes>
+     </BrowserRouter>
   );
 }
 
