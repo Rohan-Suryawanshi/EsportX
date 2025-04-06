@@ -1,29 +1,42 @@
-import { Transaction } from "../models/transactions.model";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { AsyncHandler } from "../utils/AsyncHandler";
+import { Transaction } from "../models/transactions.model.js";
+import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 
 const createTransaction = AsyncHandler(async (req, res) => {
   const { amount, type } = req.body;
-  if (!amount) {
-    throw new ApiError(400, "Amount is required");
+
+  if (!amount || amount <= 0) {
+    throw new ApiError(400, "Valid amount is required");
   }
-  if (!type) {
-    throw new ApiError(400, "Type is required");
+
+  if (!type || !["DEPOSIT", "WITHDRAW"].includes(type)) {
+    throw new ApiError(400, "Transaction type must be DEPOSIT or WITHDRAW");
   }
+
   const userId = req.user?._id;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
   const newTransaction = new Transaction({
     userId,
     amount,
     type,
   });
+
   const savedTransaction = await newTransaction.save();
+
   res
     .status(200)
     .json(
       new ApiResponse(200, savedTransaction, "Transaction created successfully")
     );
 });
+
 
 const getAllTransactions = AsyncHandler(async (req, res) => {
   const { status, type } = req.query;

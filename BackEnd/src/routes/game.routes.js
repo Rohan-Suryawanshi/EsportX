@@ -11,7 +11,7 @@ import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 const router = Router();
 
 router.get("/:id", getGame);
-router.post("/create",checkAdmin,upload.single('image'), createGame);
+router.post("/",upload.single('image'), createGame);
 router.delete("/:id",checkAdmin, deleteGame);
 router.put("/:id", checkAdmin,upload.single("image"), updateGame);
 router.get("/",getAllGames);

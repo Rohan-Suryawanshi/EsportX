@@ -10,10 +10,11 @@ import {
   updateTransactionStatus,
 } from "../controllers/transaction.controller.js";
 import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
+import verifyJWT from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/", createTransaction);
+router.post("/",verifyJWT, createTransaction);
 router.delete("/:id",checkAdmin, deleteTransaction);
 router.put("/:id", checkAdmin,updateTransactionStatus);
 

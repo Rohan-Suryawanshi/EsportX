@@ -2,6 +2,7 @@ import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Match } from "../models/matches.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { match } from "assert";
 const createMatch = AsyncHandler(async (req, res) => {
   const {
     gameId,
@@ -13,6 +14,7 @@ const createMatch = AsyncHandler(async (req, res) => {
     maxPlayers,
     levelCriteria,
   } = req.body;
+
   if (
     [
       gameId,
@@ -23,12 +25,13 @@ const createMatch = AsyncHandler(async (req, res) => {
       map,
       maxPlayers,
       levelCriteria,
-    ].some((value) => value.trim() === "")
+    ].some((value) => value === undefined || value === null || value === "")
   ) {
     throw new ApiError(400, "All Fields Are Required");
   }
 
   const status = req.body.status || "UPCOMING";
+
   const newMatch = new Match({
     gameId,
     startTime,
@@ -40,14 +43,18 @@ const createMatch = AsyncHandler(async (req, res) => {
     levelCriteria,
     status,
   });
+
   const createdMatch = await newMatch.save();
-  if (!createMatch) {
+
+  if (!createdMatch) {
     throw new ApiError(500, "Failed To Create Match");
   }
+
   res
     .status(200)
     .json(new ApiResponse(200, createdMatch, "Match Created Successfully"));
 });
+
 
 const getAllMatches = AsyncHandler(async (req, res) => {
   const { status, type, map } = req.query;
@@ -71,7 +78,7 @@ const getAllMatches = AsyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new ApiError(200, matches, "Matches Fetch Successfully"));
+    .json(new ApiResponse(200, matches, "Matches Fetch Successfully"));
 });
 
 const getMatchById = AsyncHandler(async (req, res) => {
@@ -198,6 +205,21 @@ const deleteMatch = AsyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, {}, "Match deleted successfully"));
 });
 
+const getSpecificGameMatches = AsyncHandler(async (req, res) => {
+  const gameId = req.params.id;
+
+  if (!gameId) {
+    throw new ApiError(400, "Enter the Game ID");
+  }
+
+  const matches = await Match.find({ gameId });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, matches, "Matches fetched successfully"));
+});
+
+
 export {
   createMatch,
   getAllMatches,
@@ -205,4 +227,5 @@ export {
   updateStatusOfMatch,
   updateMatchDetails,
   deleteMatch,
+  getSpecificGameMatches,
 };

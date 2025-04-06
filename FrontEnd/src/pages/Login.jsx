@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-
+import { UserContext } from "../context/UserContext";
 function LoginPage() {
   const [credentials, setCredentials] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser, setIsLoggedIn } = useContext(UserContext);
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -21,10 +22,30 @@ function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await axios.post("/api/auth/login", credentials, { withCredentials: true });
+      const response = await axios.post("/api/v1/users/login", credentials, {
+         withCredentials: true,
+      });
       if (response.data) {
-        alert("Login successful!");
-        navigate("/matches");
+       const { user, accessToken, refreshToken } = response.data.data;
+
+       // Store only what you need
+       localStorage.setItem("accessToken", accessToken);
+       localStorage.setItem("refreshToken", refreshToken);
+       localStorage.setItem(
+          "user",
+          JSON.stringify({
+             _id: user._id,
+             username: user.username,
+             email: user.email,
+             role: user.role,
+             avatar: user.avatar,
+             walletBalance: user.walletBalance,
+          })
+       );
+       localStorage.setItem("isLoggedIn", "true");
+        setUser(user);
+        setIsLoggedIn(true);
+        navigate("/games");
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

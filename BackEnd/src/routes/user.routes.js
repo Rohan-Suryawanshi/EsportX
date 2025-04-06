@@ -26,14 +26,13 @@ router.post("/refresh-token", refreshAccessToken);
 // 🔹 Authenticated Routes
 router.post("/logout", verifyJWT, logoutUser);
 router.get("/current-user", verifyJWT, getCurrentUser);
-router.put("/account-details", verifyJWT, updateAccountDetails);
 router.put("/change-password", verifyJWT, changeCurrentUserPassword);
-router.put("/avatar", verifyJWT, upload.single("avatar"), updateAvatarImage);
+router.put("/update-image/:id",verifyJWT,upload.single("avatar"),updateAvatarImage);
+router.put("/update-details", verifyJWT, updateAccountDetails);
 
 // 🔹 Admin Routes
 router.get("/", verifyJWT, getAllUsers);
 router.delete("/:id", verifyJWT, deleteUser);
 router.get("/:id", verifyJWT,checkAdmin, getUser);
-router.put("/update-image/:id",verifyJWT,upload.single("avatar"),updateAvatarImage);
-router.put("/update-details/:id", verifyJWT, updateAccountDetails);
+
 export default router;
