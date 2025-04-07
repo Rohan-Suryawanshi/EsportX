@@ -2,7 +2,6 @@ import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Match } from "../models/matches.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { match } from "assert";
 const createMatch = AsyncHandler(async (req, res) => {
   const {
     gameId,
@@ -99,7 +98,6 @@ const updateMatchDetails = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Match Id is Required");
   }
   const {
-    gameId,
     startTime,
     entryFee,
     perKill,
@@ -109,9 +107,9 @@ const updateMatchDetails = AsyncHandler(async (req, res) => {
     levelCriteria,
   } = req.body;
 
-  if (gameId && typeof gameId !== "string") {
-    throw new ApiError(400, "Invalid gameId");
-  }
+  // if (gameId && typeof gameId !== "string") {
+  //   throw new ApiError(400, "Invalid gameId");
+  // }
 
   if (startTime && isNaN(new Date(startTime))) {
     throw new ApiError(400, "Invalid startTime");
@@ -218,6 +216,7 @@ const getSpecificGameMatches = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, matches, "Matches fetched successfully"));
 });
+
 
 
 export {

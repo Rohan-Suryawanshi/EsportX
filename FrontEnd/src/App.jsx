@@ -5,9 +5,9 @@ import MatchesPage from './pages/Matche';
 import GamePage from './pages/Game';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
-import ProfilePage from './pages/Profile';
 import ProfileDashboard from './pages/Profile';
 import GameMatchesPage from './pages/GameMatchesPage';
+import AdminDashboard from './pages/AdminDashboard';
 function App() {
   return (
      <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
            <Route path="/register" element={<RegisterPage />} />
            <Route path="/profile" element={<ProfileDashboard />} />
            <Route path="/matches/games/:gameId" element={<GameMatchesPage />} />
+           <Route path="/admin-dashboard" element={<AdminDashboard/>} />
         </Routes>
      </BrowserRouter>
   );

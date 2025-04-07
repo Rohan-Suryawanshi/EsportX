@@ -13,8 +13,8 @@ function UpdatePassword() {
     setMessage("");
     setError("");
     try {
-      await axios.post("/api/user/updatePassword", passwordData, {
-        withCredentials: true,
+      await axios.put("/api/v1/users/change-password", passwordData, {
+         withCredentials: true,
       });
       setMessage("Password updated successfully");
       setPasswordData({ currentPassword: "", newPassword: "" });

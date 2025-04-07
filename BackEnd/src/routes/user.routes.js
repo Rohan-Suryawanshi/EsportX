@@ -27,7 +27,7 @@ router.post("/refresh-token", refreshAccessToken);
 router.post("/logout", verifyJWT, logoutUser);
 router.get("/current-user", verifyJWT, getCurrentUser);
 router.put("/change-password", verifyJWT, changeCurrentUserPassword);
-router.put("/update-image/:id",verifyJWT,upload.single("avatar"),updateAvatarImage);
+router.put("/update-image",verifyJWT,upload.single("avatar"),updateAvatarImage);
 router.put("/update-details", verifyJWT, updateAccountDetails);
 
 // 🔹 Admin Routes

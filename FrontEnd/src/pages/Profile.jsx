@@ -111,7 +111,7 @@ function ProfileDashboard() {
                      <FontAwesomeIcon icon={faEnvelope} /> {user?.email}
                   </p>
                   <p className="text-green-400 font-semibold mt-2">
-                     <FontAwesomeIcon icon={faWallet} /> $
+                     <FontAwesomeIcon icon={faWallet} /> ₹
                      {user?.walletBalance?.toFixed(2)}
                   </p>
                </div>
