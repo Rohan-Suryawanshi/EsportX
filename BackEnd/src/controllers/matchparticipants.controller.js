@@ -5,11 +5,13 @@ import { User } from "../models/user.model.js";
 import { MatchParticipant } from "../models/matchparticipants.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const registerParticipant = AsyncHandler(async (req, res) => {
-  const { matchId, userId, gameUsername, gameUID } = req.body;
+  const { matchId, gameUsername, gameUID } = req.body;
 
-  if (!matchId || !userId || !gameUsername || !gameUID) {
+  if (!matchId || !gameUsername || !gameUID) {
     throw new ApiError(400, "All Fields Are Required");
   }
+
+  const userId = req.user?._id;
 
   const match = await Match.findById(matchId);
   if (!match) throw new ApiError(404, "Match Not Found");

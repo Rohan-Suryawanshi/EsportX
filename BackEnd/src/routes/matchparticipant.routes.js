@@ -6,7 +6,7 @@ import {
   removeParticipant,
   updateParticipantStats,
   updateBulkParticipantStats,
-} from "../controllers/matchParticipant.controller.js";
+} from "../controllers/matchparticipants.controller.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
 import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 

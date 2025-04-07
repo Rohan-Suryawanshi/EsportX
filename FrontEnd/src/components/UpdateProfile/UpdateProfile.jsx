@@ -39,7 +39,7 @@ function UpdateProfile() {
 
          // Update user context and localStorage
          setUser(response.data?.data);
-         localStorage.setItem("user", JSON.stringify(response.data));
+         localStorage.setItem("user", JSON.stringify(response.data?.data));
 
          setSuccess("Profile updated successfully");
          setError("");

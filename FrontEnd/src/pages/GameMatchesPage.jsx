@@ -9,7 +9,15 @@ function GameMatchesPage() {
    const [matches, setMatches] = useState([]);
    const [loading, setLoading] = useState(true);
 
-   const isLoggedIn = !!localStorage.getItem("refreshToken"); // Assuming JWT stored in localStorage
+   const isLoggedIn = !!localStorage.getItem("refreshToken");
+
+   // Modal state
+   const [showModal, setShowModal] = useState(false);
+   const [selectedMatch, setSelectedMatch] = useState(null);
+   const [gameUsername, setGameUsername] = useState("");
+   const [gameUID, setGameUID] = useState("");
+   const [formError, setFormError] = useState("");
+   const [successMessage, setSuccessMessage] = useState("");
 
    useEffect(() => {
       const fetchMatches = async () => {
@@ -29,6 +37,44 @@ function GameMatchesPage() {
 
    const handleLoginRedirect = () => {
       navigate("/login");
+   };
+
+   const openModal = (match) => {
+      setSelectedMatch(match);
+      setGameUsername("");
+      setGameUID("");
+      setFormError("");
+      setSuccessMessage("");
+      setShowModal(true);
+   };
+
+   const handleRegister = async () => {
+      if (!gameUsername || !gameUID) {
+         setFormError("Please fill in all fields.");
+         return;
+      }
+
+      try {
+         const response = await axios.post(
+            "/api/v1/match-participants/register",
+            {
+               matchId: selectedMatch._id,
+               gameUsername,
+               gameUID,
+            }
+         );
+
+         if (response.data.success) {
+            setSuccessMessage("Registered successfully!");
+            setTimeout(() => {
+               setShowModal(false);
+            }, 1500);
+         }
+      } catch (error) {
+         setFormError(
+            error?.response?.data?.message || "Registration failed. Try again."
+         );
+      }
    };
 
    return (
@@ -52,7 +98,7 @@ function GameMatchesPage() {
                </div>
             ) : (
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {matches.map((match, index) => {
+                  {matches.map((match) => {
                      const availableSeats =
                         match.maxPlayers - match.totalPlayersJoined;
                      const fillPercent = Math.min(
@@ -62,7 +108,7 @@ function GameMatchesPage() {
 
                      return (
                         <div
-                           key={index}
+                           key={match._id}
                            className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition duration-300"
                         >
                            <div className="mb-4">
@@ -110,7 +156,10 @@ function GameMatchesPage() {
                            </div>
 
                            {isLoggedIn ? (
-                              <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                              <button
+                                 onClick={() => openModal(match)}
+                                 className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                              >
                                  Join Match
                               </button>
                            ) : (
@@ -127,6 +176,54 @@ function GameMatchesPage() {
                </div>
             )}
          </div>
+
+         {/* Join Match Modal */}
+         {showModal && (
+            <div className="fixed inset-0 z-50 backdrop-blur-3xl flex items-center justify-center bg-opacity-50">
+               <div className="bg-white p-6 rounded-xl w-full max-w-md">
+                  <h2 className="text-xl font-bold mb-4">Join Match</h2>
+
+                  <input
+                     type="text"
+                     placeholder="Game Username"
+                     value={gameUsername}
+                     onChange={(e) => setGameUsername(e.target.value)}
+                     className="w-full mb-3 p-2 border border-gray-300 rounded"
+                  />
+                  <input
+                     type="text"
+                     placeholder="Game UID"
+                     value={gameUID}
+                     onChange={(e) => setGameUID(e.target.value)}
+                     className="w-full mb-3 p-2 border border-gray-300 rounded"
+                  />
+
+                  {formError && (
+                     <p className="text-red-500 text-sm mb-2">{formError}</p>
+                  )}
+                  {successMessage && (
+                     <p className="text-green-600 text-sm mb-2">
+                        {successMessage}
+                     </p>
+                  )}
+
+                  <div className="flex justify-end gap-2">
+                     <button
+                        className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                        onClick={() => setShowModal(false)}
+                     >
+                        Cancel
+                     </button>
+                     <button
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        onClick={handleRegister}
+                     >
+                        Register
+                     </button>
+                  </div>
+               </div>
+            </div>
+         )}
       </>
    );
 }
