@@ -12,51 +12,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function MyMatches() {
    const [activeTab, setActiveTab] = useState("ongoing");
-   const [matches, setMatches] = useState({
-      ongoing: [],
-      upcoming: [],
-      results: [],
-   });
+   const [allJoinedMatches, setAllJoinedMatches] = useState([]);
    const [loading, setLoading] = useState(true);
    const token = localStorage.getItem("accessToken");
-   useEffect(() => {
-      const fetchMatches = async () => {
-         try {
-            const [ongoingRes, upcomingRes, resultsRes] = await Promise.all([
-               axios.get("/api/v1/matches?status=ONGOING", {
-                  headers: {
-                     Authorization: `Bearer ${token}`,
-                     "Content-Type": "application/json",
-                  },
-               }),
-               axios.get("/api/v1/matches?status=UPCOMING", {
-                  headers: {
-                     Authorization: `Bearer ${token}`,
-                     "Content-Type": "application/json",
-                  },
-               }),
-               axios.get("/api/v1/matches?status=COMPLETE", {
-                  headers: {
-                     Authorization: `Bearer ${token}`,
-                     "Content-Type": "application/json",
-                  },
-               }),
-            ]);
 
-            setMatches({
-               ongoing: ongoingRes.data.data || [],
-               upcoming: upcomingRes.data.data || [],
-               results: resultsRes.data.data || [],
+   useEffect(() => {
+      const fetchJoinedMatches = async () => {
+         try {
+            const response = await axios.get("/api/v1/users/joined-matches", {
+               headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+               },
             });
+
+            const validMatches = response.data.data.filter(
+               (m) => m.matchId !== null
+            );
+
+            setAllJoinedMatches(validMatches);
          } catch (error) {
-            console.error("Error fetching matches:", error);
+            console.error("Error fetching joined matches:", error);
          } finally {
             setLoading(false);
          }
       };
 
-      fetchMatches();
-   },[]);
+      fetchJoinedMatches();
+   }, []);
+
+   const filterMatchesByStatus = (status) => {
+      return allJoinedMatches
+         .filter((item) => item.matchId?.status === status.toUpperCase())
+         .map((item) => item.matchId); // Extract match details
+   };
 
    const renderMatches = (matchList) => {
       if (loading)
@@ -65,13 +54,14 @@ function MyMatches() {
                Loading matches...
             </p>
          );
+
       if (!matchList.length)
          return (
             <p className="text-center text-gray-400 py-4">No matches found.</p>
          );
 
       return matchList.map((match) => {
-         const incomeEstimate = match.perKill * 3; // Example for 3 kills
+         const incomeEstimate = match.perKill * 3;
 
          return (
             <div
@@ -154,11 +144,7 @@ function MyMatches() {
                ))}
             </div>
 
-            <div>
-               {activeTab === "ongoing" && renderMatches(matches.ongoing)}
-               {activeTab === "upcoming" && renderMatches(matches.upcoming)}
-               {activeTab === "results" && renderMatches(matches.results)}
-            </div>
+            <div>{renderMatches(filterMatchesByStatus(activeTab))}</div>
          </div>
       </div>
    );

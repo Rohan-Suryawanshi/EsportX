@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import { UserContext } from "../context/UserContext";
 
 function GameMatchesPage() {
    const { gameId } = useParams();
@@ -12,6 +13,7 @@ function GameMatchesPage() {
    const isLoggedIn = !!localStorage.getItem("refreshToken");
 
    // Modal state
+   const {  setUser } = useContext(UserContext);
    const [showModal, setShowModal] = useState(false);
    const [selectedMatch, setSelectedMatch] = useState(null);
    const [gameUsername, setGameUsername] = useState("");
@@ -49,23 +51,52 @@ function GameMatchesPage() {
    };
 
    const handleRegister = async () => {
+      const token = localStorage.getItem("accessToken");
       if (!gameUsername || !gameUID) {
          setFormError("Please fill in all fields.");
          return;
       }
 
       try {
+
          const response = await axios.post(
             "/api/v1/match-participants/register",
             {
                matchId: selectedMatch._id,
                gameUsername,
                gameUID,
+            },
+            {
+               headers: {
+                  Authorization: `Bearer ${token}`,
+               },
             }
          );
 
          if (response.data.success) {
             setSuccessMessage("Registered successfully!");
+            const fetchUserData = async () => {
+               try {
+                  const response = await axios.get(
+                     "/api/v1/users/current-user",
+                     {
+                        headers: {
+                           Authorization: `Bearer ${token}`,
+                        },
+                     }
+                  );
+                  setUser(response.data.data);
+                  localStorage.setItem(
+                     "user",
+                     JSON.stringify(response.data.data)
+                  );
+
+               } catch {
+                  console.log("Failed To fetch data")  
+               }
+            };
+
+            fetchUserData();
             setTimeout(() => {
                setShowModal(false);
             }, 1500);

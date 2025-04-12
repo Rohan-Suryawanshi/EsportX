@@ -5,6 +5,7 @@ import {
   getAllUsers,
   getCurrentUser,
   getUser,
+  getUserJoinedMatches,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -18,21 +19,19 @@ import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const router = Router();
 
-// 🔹 Public Routes
-router.post("/register", upload.single("avatar"), registerUser);
-router.post("/login", loginUser);
-router.post("/refresh-token", refreshAccessToken);
-
 // 🔹 Authenticated Routes
 router.post("/logout", verifyJWT, logoutUser);
+router.get("/joined-matches", verifyJWT, getUserJoinedMatches);
 router.get("/current-user", verifyJWT, getCurrentUser);
 router.put("/change-password", verifyJWT, changeCurrentUserPassword);
-router.put("/update-image",verifyJWT,upload.single("avatar"),updateAvatarImage);
+router.put("/update-image", verifyJWT, upload.single("avatar"), updateAvatarImage);
 router.put("/update-details", verifyJWT, updateAccountDetails);
+
+
 
 // 🔹 Admin Routes
 router.get("/", verifyJWT, getAllUsers);
 router.delete("/:id", verifyJWT, deleteUser);
-router.get("/:id", verifyJWT,checkAdmin, getUser);
+router.get("/:id", verifyJWT, getUser);
 
 export default router;

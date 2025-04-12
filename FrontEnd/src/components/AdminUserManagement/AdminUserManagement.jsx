@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faEye, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function AdminUserManagement() {
    const [users, setUsers] = useState([]);
    const [selectedUser, setSelectedUser] = useState(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState("");
+   const [showModal, setShowModal] = useState(false);
 
    useEffect(() => {
       const fetchUsers = async () => {
@@ -49,9 +50,15 @@ function AdminUserManagement() {
             headers: { Authorization: `Bearer ${token}` },
          });
          setSelectedUser(res.data.data);
+         setShowModal(true);
       } catch {
          alert("Failed to fetch user details.");
       }
+   };
+
+   const closeModal = () => {
+      setShowModal(false);
+      setSelectedUser(null);
    };
 
    if (loading) return <p className="text-center">Loading users...</p>;
@@ -103,25 +110,33 @@ function AdminUserManagement() {
             </table>
          </div>
 
-         {selectedUser && (
-            <div className="mt-6 bg-gray-100 p-4 rounded-lg shadow-md">
-               <h3 className="text-xl font-semibold mb-2">User Details</h3>
-               <p>
-                  <strong>ID:</strong> {selectedUser._id}
-               </p>
-               <p>
-                  <strong>Username:</strong> {selectedUser.username}
-               </p>
-               <p>
-                  <strong>Email:</strong> {selectedUser.email}
-               </p>
-               <p>
-                  <strong>Role:</strong> {selectedUser.role}
-               </p>
-               <p>
-                  <strong>Wallet:</strong> ₹
-                  {selectedUser.walletBalance?.toFixed(2)}
-               </p>
+         {showModal && selectedUser && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+               <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+                  <button
+                     onClick={closeModal}
+                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                  >
+                     <FontAwesomeIcon icon={faTimes} size="lg" />
+                  </button>
+                  <h3 className="text-xl font-bold mb-4">User Details</h3>
+                  <p>
+                     <strong>ID:</strong> {selectedUser._id}
+                  </p>
+                  <p>
+                     <strong>Username:</strong> {selectedUser.username}
+                  </p>
+                  <p>
+                     <strong>Email:</strong> {selectedUser.email}
+                  </p>
+                  <p>
+                     <strong>Role:</strong> {selectedUser.role}
+                  </p>
+                  <p>
+                     <strong>Wallet:</strong> ₹
+                     {selectedUser.walletBalance?.toFixed(2)}
+                  </p>
+               </div>
             </div>
          )}
       </div>

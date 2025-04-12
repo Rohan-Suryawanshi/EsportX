@@ -23,6 +23,7 @@ function WithdrawBalance() {
                },
             });
             setUser(response.data.data);
+            localStorage.setItem("user", JSON.stringify(response.data.data));
          } catch {
             setError("Failed to load user data");
          } finally {

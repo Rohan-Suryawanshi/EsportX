@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { MatchParticipant } from "../models/matchparticipants.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import {updateLeaderboard} from "../controllers/leaderboard.controller.js"
+import { updateLeaderboard } from "../controllers/leaderboard.controller.js";
 const registerParticipant = AsyncHandler(async (req, res) => {
   const { matchId, gameUsername, gameUID } = req.body;
 
@@ -21,8 +21,12 @@ const registerParticipant = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Match is full");
   }
 
-  const userExists = await User.exists({ _id: userId });
-  if (!userExists) throw new ApiError(404, "User Not Found");
+  const user = await User.findById(userId);
+  if (!user) throw new ApiError(404, "User Not Found");
+
+  if (user.balance < match.entryFee) {
+    throw new ApiError(400, "Insufficient balance to join the match");
+  }
 
   const existingParticipant = await MatchParticipant.findOne({
     matchId,
@@ -32,12 +36,16 @@ const registerParticipant = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Participant Already Registered");
   }
 
+  user.walletBalance -= match.entryFee;
+  await user.save();
+
   const participant = new MatchParticipant({
     matchId,
     userId,
     gameUsername,
     gameUID,
   });
+
   const registeredParticipant = await participant.save();
   if (!registeredParticipant) {
     throw new ApiError(500, "Failed To Register Participant");
@@ -57,7 +65,6 @@ const registerParticipant = AsyncHandler(async (req, res) => {
       )
     );
 });
-
 
 const getMatchParticipants = AsyncHandler(async (req, res) => {
   const { matchId } = req.params;
@@ -130,39 +137,58 @@ const removeParticipant = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Participant Removed Successfully"));
 });
 
-
 const updateParticipantStats = AsyncHandler(async (req, res) => {
   const { id } = req.params;
   let { kills } = req.body;
-  kills=parseInt(kills);
-  console.log("The value of the kill is"+kills)
+  kills = parseInt(kills);
+
+  console.log("The value of the kill is: " + kills);
+
   if (!id) {
     throw new ApiError(400, "Participant ID is required");
   }
+
   if (kills === undefined || typeof kills !== "number" || kills < 0) {
     throw new ApiError(400, "Valid kills value is required");
   }
 
- const participant = await MatchParticipant.findById(id).populate(
-   "matchId",
-   "perKill gameId"
- );
- if (!participant) throw new ApiError(404, "Participant Not Found");
+  const participant = await MatchParticipant.findById(id).populate(
+    "matchId",
+    "perKill gameId"
+  );
 
+  if (!participant) throw new ApiError(404, "Participant Not Found");
+
+  // Calculate earnings
+  const earnings = kills * participant.matchId.perKill;
+
+  // Update kills
   participant.kills = kills;
   await participant.save();
+
+  // Update leaderboard
   await updateLeaderboard(participant.matchId._id);
 
-  res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
+  // Update user balance
+  const user = await User.findById(participant.userId);
+  if (!user) throw new ApiError(404, "User Not Found");
+
+  user.walletBalance += earnings;
+  await user.save();
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
         participant,
-        "Participant Stats Updated Successfully"
-      )
-    );
+        updatedBalance: user.balance,
+        earnings,
+      },
+      "Participant Stats and Balance Updated Successfully"
+    )
+  );
 });
+
 const updateBulkParticipantStats = AsyncHandler(async (req, res) => {
   const { matchId, participants } = req.body;
 

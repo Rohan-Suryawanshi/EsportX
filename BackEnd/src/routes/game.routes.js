@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/:id", getGame);
 router.post("/",upload.single('image'), createGame);
-router.delete("/:id",checkAdmin, deleteGame);
+router.delete("/:id", deleteGame);
 router.put("/:id", checkAdmin,upload.single("image"), updateGame);
 router.get("/",getAllGames);
 

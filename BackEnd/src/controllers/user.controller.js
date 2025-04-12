@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { uploadToCloudinary, destroyImage } from "../utils/Cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import fs from "fs";
+import { MatchParticipant } from "../models/matchparticipants.model.js";
 
 const deleteLocalFile = (fileName) => {
   if (fs.existsSync(fileName)) {
@@ -372,6 +373,33 @@ const updateAvatarImage = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, updatedUser, "Avatar Updated Successfully"));
 });
 
+const getUserJoinedMatches = AsyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new ApiError(401, "Unauthorized or invalid user");
+  }
+
+  const joinedMatches = await MatchParticipant.find({ userId })
+    .populate({
+      path: "matchId",
+      populate: {
+        path: "gameId", // populate game info as well
+      },
+    })
+    .sort({ createdAt: -1 });
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        joinedMatches,
+        "User joined matches fetched successfully"
+      )
+    );
+});
+
 export {
   registerUser,
   deleteUser,
@@ -384,4 +412,5 @@ export {
   getCurrentUser,
   updateAccountDetails,
   updateAvatarImage,
+  getUserJoinedMatches,
 };

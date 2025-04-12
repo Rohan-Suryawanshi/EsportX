@@ -13,17 +13,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Navbar from "../components/Navbar/Navbar";
-import UserManagement from "../components/DepositBalance/DepositBalance.jsx";
 import TournamentManagement from "../components/TournamentManagement/TournamentManagement.jsx";
-import WithdrawRequests from "../components/DepositBalance/DepositBalance.jsx";
-import AdminAnalytics from "../components/DepositBalance/DepositBalance.jsx";
 
 import { UserContext } from "../context/UserContext";
 import AdminPaymentDashboard from "../components/AdminPaymentDashboard/AdminPaymentDashboard.jsx";
+import AdminUserManagement from "../components/AdminUserManagement/AdminUserManagement.jsx";
+import AdminGamePage from "../components/AdminGamePage/AdminGamePage.jsx";
 
 function AdminDashboard() {
    const { user, logout } = useContext(UserContext);
-   const [activeSection, setActiveSection] = useState("dashboard");
+   const [activeSection, setActiveSection] = useState("Game");
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
    const navigate = useNavigate();
 
@@ -34,14 +33,14 @@ function AdminDashboard() {
 
    const renderContent = () => {
       switch (activeSection) {
-         case "dashboard":
-            return <AdminAnalytics />;
-         case "users":
-            return  <AdminPaymentDashboard/>;
-         case "tournaments":
+         case "Game":
+            return  <AdminGamePage/>;
+         case "Payment":
+            return <AdminPaymentDashboard />;
+         case "Tournament":
             return <TournamentManagement />;
-         case "withdrawals":
-            return <WithdrawRequests />;
+         case "Users":
+            return <AdminUserManagement />;
          default:
             return null;
       }
@@ -74,24 +73,24 @@ function AdminDashboard() {
                <nav className="space-y-3">
                   {[
                      {
-                        name: "Dashboard",
+                        name: "Game",
                         icon: faTachometerAlt,
-                        section: "dashboard",
+                        section: "Game",
                      },
                      {
-                        name: "Payment Management",
+                        name: "Payment",
                         icon: faUsersCog,
-                        section: "users",
+                        section: "Payment",
                      },
                      {
-                        name: "Tournament Management",
+                        name: "Tournament",
                         icon: faGamepad,
-                        section: "tournaments",
+                        section: "Tournament",
                      },
                      {
-                        name: "Withdraw Requests",
+                        name: "Users",
                         icon: faMoneyCheckAlt,
-                        section: "withdrawals",
+                        section: "Users",
                      },
                   ].map(({ name, icon, section }) => (
                      <button
