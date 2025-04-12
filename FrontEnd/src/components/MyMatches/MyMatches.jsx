@@ -18,14 +18,29 @@ function MyMatches() {
       results: [],
    });
    const [loading, setLoading] = useState(true);
-
+   const token = localStorage.getItem("accessToken");
    useEffect(() => {
       const fetchMatches = async () => {
          try {
             const [ongoingRes, upcomingRes, resultsRes] = await Promise.all([
-               axios.get("/api/v1/matches?status=ONGOING"),
-               axios.get("/api/v1/matches?status=UPCOMING"),
-               axios.get("/api/v1/matches?status=COMPLETE"),
+               axios.get("/api/v1/matches?status=ONGOING", {
+                  headers: {
+                     Authorization: `Bearer ${token}`,
+                     "Content-Type": "application/json",
+                  },
+               }),
+               axios.get("/api/v1/matches?status=UPCOMING", {
+                  headers: {
+                     Authorization: `Bearer ${token}`,
+                     "Content-Type": "application/json",
+                  },
+               }),
+               axios.get("/api/v1/matches?status=COMPLETE", {
+                  headers: {
+                     Authorization: `Bearer ${token}`,
+                     "Content-Type": "application/json",
+                  },
+               }),
             ]);
 
             setMatches({
@@ -41,7 +56,7 @@ function MyMatches() {
       };
 
       fetchMatches();
-   }, []);
+   },[]);
 
    const renderMatches = (matchList) => {
       if (loading)

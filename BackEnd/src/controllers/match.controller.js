@@ -14,6 +14,8 @@ const createMatch = AsyncHandler(async (req, res) => {
     levelCriteria,
   } = req.body;
 
+  console.log(req.body);
+
   if (
     [
       gameId,
@@ -58,6 +60,7 @@ const createMatch = AsyncHandler(async (req, res) => {
 const getAllMatches = AsyncHandler(async (req, res) => {
   const { status, type, map } = req.query;
   let filter = {};
+
   if (req.user?.role !== "Admin") {
     filter.userId = req.user?._id;
   }
@@ -74,6 +77,8 @@ const getAllMatches = AsyncHandler(async (req, res) => {
   const matches = await Match.find(filter)
     .populate("gameId")
     .sort({ createdAt: -1 });
+    console.log(filter);
+
 
   res
     .status(200)
@@ -143,7 +148,6 @@ const updateMatchDetails = AsyncHandler(async (req, res) => {
     matchId,
     {
       $set: {
-        gameId,
         startTime,
         entryFee,
         perKill,

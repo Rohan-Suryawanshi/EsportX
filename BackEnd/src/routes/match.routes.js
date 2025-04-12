@@ -13,9 +13,10 @@ import {
 
 const router = Router();
 
-router.post("/", verifyJWT,checkAdmin, createMatch); // Admin only
+router.post("/", verifyJWT, createMatch); // Admin only
 // router.post("/", createMatch);
-router.get("/", getAllMatches);
+router.get("/all-matches", getAllMatches);
+router.get("/",verifyJWT, getAllMatches);
 router.get("/:id", getMatchById);
 router.put("/update/:id", verifyJWT, updateMatchDetails); // Admin only
 router.patch("/status/:id", verifyJWT, updateStatusOfMatch); // Admin only

@@ -22,10 +22,10 @@ router.get("/match/:matchId",verifyJWT, getMatchParticipants);
 router.get("/:id",verifyJWT,checkAdmin, getParticipantById);
 
 //  Remove a participant from a match
-router.delete("/:id",verifyJWT,checkAdmin, removeParticipant);
+router.delete("/:id",verifyJWT, removeParticipant);
 
 // Update a single participant's kills (and update leaderboard)
-router.put("/:id/stats", verifyJWT, checkAdmin, updateParticipantStats);
+router.put("/stats/:id", verifyJWT, updateParticipantStats);
 
 // Bulk update participants' kills for a match (and update leaderboard)
 router.put(

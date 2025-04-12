@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { MatchParticipant } from "../models/matchparticipants.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import {updateLeaderboard} from "../controllers/leaderboard.controller.js"
 const registerParticipant = AsyncHandler(async (req, res) => {
   const { matchId, gameUsername, gameUID } = req.body;
 
@@ -69,7 +70,7 @@ const getMatchParticipants = AsyncHandler(async (req, res) => {
   }
   const participants = await MatchParticipant.find({ matchId }).populate(
     "userId",
-    "name email"
+    "username email"
   );
   res
     .status(200)
@@ -132,7 +133,9 @@ const removeParticipant = AsyncHandler(async (req, res) => {
 
 const updateParticipantStats = AsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { kills } = req.body;
+  let { kills } = req.body;
+  kills=parseInt(kills);
+  console.log("The value of the kill is"+kills)
   if (!id) {
     throw new ApiError(400, "Participant ID is required");
   }

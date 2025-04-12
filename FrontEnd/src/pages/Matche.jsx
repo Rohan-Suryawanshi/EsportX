@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
-import LoginPage from "./Login";
 
 function MatchesPage() {
   const [matches, setMatches] = useState([]);
@@ -12,7 +11,9 @@ function MatchesPage() {
     const fetchMatches = async () => {
       try {
         const queryParams = new URLSearchParams(filters).toString();
-        const response = await axios.get(`/api/v1/matches?${queryParams}`);
+        const response = await axios.get(
+           `/api/v1/matches/all-matches?${queryParams}`
+        );
         if (response.data.success) {
           setMatches(response.data.data);
         }

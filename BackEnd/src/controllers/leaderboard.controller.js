@@ -1,8 +1,8 @@
-import { Leaderboard } from "../models/leaderboard.model";
-import { Match } from "../models/matches.model";
-import { MatchParticipant } from "../models/matchparticipants.model";
-import { ApiResponse } from "../utils/ApiResponse";
-import { AsyncHandler } from "../utils/AsyncHandler";
+import { Leaderboard } from "../models/leaderboard.model.js";
+import { Match } from "../models/matches.model.js";
+import { MatchParticipant } from "../models/matchparticipants.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 
 const getLeaderboard = AsyncHandler(async (req, res) => {
   const { gameId } = req.query;

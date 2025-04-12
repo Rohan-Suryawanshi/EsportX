@@ -14,11 +14,12 @@ import {
 
 import Navbar from "../components/Navbar/Navbar";
 import UserManagement from "../components/DepositBalance/DepositBalance.jsx";
-import TournamentManagement from "../components/AdminMatchDashboard/AdminMatchDashboard.jsx";
+import TournamentManagement from "../components/TournamentManagement/TournamentManagement.jsx";
 import WithdrawRequests from "../components/DepositBalance/DepositBalance.jsx";
 import AdminAnalytics from "../components/DepositBalance/DepositBalance.jsx";
 
 import { UserContext } from "../context/UserContext";
+import AdminPaymentDashboard from "../components/AdminPaymentDashboard/AdminPaymentDashboard.jsx";
 
 function AdminDashboard() {
    const { user, logout } = useContext(UserContext);
@@ -36,7 +37,7 @@ function AdminDashboard() {
          case "dashboard":
             return <AdminAnalytics />;
          case "users":
-            return <UserManagement />;
+            return  <AdminPaymentDashboard/>;
          case "tournaments":
             return <TournamentManagement />;
          case "withdrawals":
@@ -78,7 +79,7 @@ function AdminDashboard() {
                         section: "dashboard",
                      },
                      {
-                        name: "User Management",
+                        name: "Payment Management",
                         icon: faUsersCog,
                         section: "users",
                      },

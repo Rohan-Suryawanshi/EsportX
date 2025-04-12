@@ -19,7 +19,7 @@ const router = Router();
 router.post("/", verifyJWT, createWithdrawRequest);
 
 // Get all payments (Only authenticated users)
-router.get("/", verifyJWT,checkAdmin, getAllPayments);
+router.get("/", verifyJWT, getAllPayments);
 
 
 
@@ -30,7 +30,7 @@ router.get("/user",verifyJWT, getUserPayments);
 router.get("/:id", verifyJWT, getPaymentById);
 
 // Update payment status (Authenticated User)
-router.put("/:id", verifyJWT,checkAdmin,updatePaymentStatus);
+router.put("/:id", verifyJWT,updatePaymentStatus);
 
 // Delete a payment (Authenticated User)
 router.delete("/:id", verifyJWT,checkAdmin, deletePayment);
