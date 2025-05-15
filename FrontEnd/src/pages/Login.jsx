@@ -26,6 +26,7 @@ function LoginPage() {
          withCredentials: true,
       });
       if (response.data) {
+        console.log(response.data);
        const { user, accessToken, refreshToken } = response.data.data;
 
        // Store only what you need
@@ -45,7 +46,13 @@ function LoginPage() {
        localStorage.setItem("isLoggedIn", "true");
         setUser(user);
         setIsLoggedIn(true);
-        navigate("/games");
+        if(response.data.data?.user?.role=="Admin")
+        {
+           navigate("/admin-dashboard");
+        }
+        else{
+          navigate("/games");
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -55,59 +62,80 @@ function LoginPage() {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen flex items-center justify-center  px-4">
-        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-          <h2 className="text-3xl font-extrabold text-center text-gray-800">Welcome Back</h2>
-          <p className="text-gray-500 text-center mb-6">Login to access your account</p>
-          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
-              <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-2" />
-              <input 
-                type="text" 
-                name="username" 
-                placeholder="Username" 
-                className="w-full bg-transparent outline-none" 
-                onChange={handleChange} 
-              />
-            </div>
-            <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
-              <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mr-2" />
-              <input 
-                type="email" 
-                name="email" 
-                placeholder="Email" 
-                className="w-full bg-transparent outline-none" 
-                onChange={handleChange} 
-              />
-            </div>
-            <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
-              <FontAwesomeIcon icon={faLock} className="text-gray-400 mr-2" />
-              <input 
-                type="password" 
-                name="password" 
-                placeholder="Password" 
-                className="w-full bg-transparent outline-none" 
-                onChange={handleChange} 
-                required 
-              />
-            </div>
-            <button 
-              type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300" 
-              disabled={loading}
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-          <p className="text-center text-gray-500 text-sm mt-4">
-            Don't have an account? <a href="/register" className="text-blue-600 hover:underline">Sign up</a>
-          </p>
+     <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center  px-4">
+           <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+              <h2 className="text-3xl font-extrabold text-center text-gray-800">
+                 Welcome Back
+              </h2>
+              <p className="text-gray-500 text-center mb-6">
+                 Login to access your account
+              </p>
+              {error && (
+                 <p className="text-red-500 text-center mb-4">{error}</p>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                 <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
+                    <FontAwesomeIcon
+                       icon={faUser}
+                       className="text-gray-400 mr-2"
+                    />
+                    <input
+                       type="text"
+                       name="username"
+                       placeholder="Username"
+                       className="w-full bg-transparent outline-none"
+                       value={credentials.username}
+                       onChange={handleChange}
+                    />
+                 </div>
+                 <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
+                    <FontAwesomeIcon
+                       icon={faEnvelope}
+                       className="text-gray-400 mr-2"
+                    />
+                    <input
+                       type="email"
+                       name="email"
+                       placeholder="Email"
+                       className="w-full bg-transparent outline-none"
+                       value={credentials.email}
+                       onChange={handleChange}
+                    />
+                 </div>
+                 <div className="flex items-center border rounded-lg px-4 py-2 bg-gray-50">
+                    <FontAwesomeIcon
+                       icon={faLock}
+                       className="text-gray-400 mr-2"
+                    />
+                    <input
+                       type="password"
+                       name="password"
+                       placeholder="Password"
+                       className="w-full bg-transparent outline-none"
+                       value={credentials.password}
+                       onChange={handleChange}
+                       required
+                    />
+                 </div>
+                 <button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-300"
+                    disabled={loading}
+                 >
+                    {loading ? "Logging in..." : "Login"}
+                 </button>
+              </form>
+              <p className="text-center text-gray-500 text-sm mt-4">
+                 Don't have an account?{" "}
+                 <a href="/register" className="text-blue-600 hover:underline">
+                    Sign up
+                 </a>
+              </p>
+           </div>
         </div>
-      </div>
-    </>
+     </>
   );
 }
 

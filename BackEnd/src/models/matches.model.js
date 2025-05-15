@@ -20,7 +20,9 @@ const matchSchema = new mongoose.Schema(
       enum: ["UPCOMING", "ONGOING", "COMPLETE"],
       default: "UPCOMING",
     },
-    levelCriteria: { type: Number, default: 0,required:true },
+    levelCriteria: { type: Number, default: 0, required: true },
+    roomId: { type: String, default: "Empty" },
+    roomPassword: { type: String, default: "Empty" },
   },
   { timestamps: true }
 );

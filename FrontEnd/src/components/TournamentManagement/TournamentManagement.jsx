@@ -29,6 +29,8 @@ export default function TournamentManagement() {
       map: "",
       maxPlayers: "",
       levelCriteria: "",
+      roomId: "",
+      roomPassword: "",
    });
 
    const token = localStorage.getItem("accessToken");
@@ -221,6 +223,15 @@ export default function TournamentManagement() {
                               <FontAwesomeIcon icon={faCheck} />
                            </button>
                            <button
+                              title="Mark as Ongoing"
+                              className="bg-amber-200 hover:bg-amber-100 text-white p-2 rounded-md"
+                              onClick={() =>
+                                 handleStatus(match._id, "COMPLETE")
+                              }
+                           >
+                              <FontAwesomeIcon icon={faCheck} />
+                           </button>
+                           <button
                               title="Mark as Upcoming"
                               className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md"
                               onClick={() =>
@@ -384,6 +395,18 @@ function MatchForm({
                type="number"
                value={form.levelCriteria}
                onChange={(val) => setForm({ ...form, levelCriteria: val })}
+            />
+            <InputField
+               label="Room Id"
+               type="text"
+               value={form.RoomId}
+               onChange={(val) => setForm({ ...form, roomId: val })}
+            />
+            <InputField
+               label="Room Password"
+               type="text"
+               value={form.RoomPassword}
+               onChange={(val) => setForm({ ...form,roomPassword: val })}
             />
          </div>
          <div className="mt-4 flex gap-4">

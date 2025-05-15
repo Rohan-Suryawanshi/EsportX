@@ -8,6 +8,7 @@ import RegisterPage from './pages/Register';
 import ProfileDashboard from './pages/Profile';
 import GameMatchesPage from './pages/GameMatchesPage';
 import AdminDashboard from './pages/AdminDashboard';
+import LeaderboardPage from './pages/LeaderboardPage';
 function App() {
   return (
      <BrowserRouter>
@@ -19,7 +20,8 @@ function App() {
            <Route path="/register" element={<RegisterPage />} />
            <Route path="/profile" element={<ProfileDashboard />} />
            <Route path="/matches/games/:gameId" element={<GameMatchesPage />} />
-           <Route path="/admin-dashboard" element={<AdminDashboard/>} />
+           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+           <Route path="/leaderboard" element={<LeaderboardPage/>} />
         </Routes>
      </BrowserRouter>
   );

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faWallet, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faWallet } from "@fortawesome/free-solid-svg-icons";
 
 function ProfileCard({ user }) {
   return (
@@ -16,10 +16,10 @@ function ProfileCard({ user }) {
               <FontAwesomeIcon icon={faWallet} />{" "}
               <span>Wallet Balance: ₹{user?.walletBalance?.toFixed(2)}</span>
            </p>
-           <p className="flex items-center gap-2">
+           {/* <p className="flex items-center gap-2">
               <FontAwesomeIcon icon={faGamepad} />{" "}
               <span>Kills: {user?.kills || 0}</span>
-           </p>
+           </p> */}
         </div>
      </div>
   );

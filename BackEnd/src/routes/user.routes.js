@@ -19,6 +19,11 @@ import { checkAdmin } from "../middlewares/checkAdmin.middleware.js";
 
 const router = Router();
 
+// 🔹 Public Routes
+router.post("/register",upload.single("avatar"), registerUser);
+router.post("/login", loginUser);
+router.post("/refresh-token", refreshAccessToken);
+
 // 🔹 Authenticated Routes
 router.post("/logout", verifyJWT, logoutUser);
 router.get("/joined-matches", verifyJWT, getUserJoinedMatches);
@@ -27,11 +32,9 @@ router.put("/change-password", verifyJWT, changeCurrentUserPassword);
 router.put("/update-image", verifyJWT, upload.single("avatar"), updateAvatarImage);
 router.put("/update-details", verifyJWT, updateAccountDetails);
 
-
-
 // 🔹 Admin Routes
-router.get("/", verifyJWT, getAllUsers);
-router.delete("/:id", verifyJWT, deleteUser);
-router.get("/:id", verifyJWT, getUser);
+router.get("/", verifyJWT, checkAdmin, getAllUsers);
+router.delete("/:id", verifyJWT, checkAdmin, deleteUser);
+router.get("/:id", verifyJWT, checkAdmin, getUser);
 
 export default router;

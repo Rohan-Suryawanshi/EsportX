@@ -173,7 +173,7 @@ function AdminGamePage() {
 
          {/* Modal */}
          {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+            <div className="fixed inset-0 backdrop-blur-3xl bg-opacity-40 flex items-center justify-center z-50">
                <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg relative">
                   <button
                      onClick={() => setShowModal(false)}

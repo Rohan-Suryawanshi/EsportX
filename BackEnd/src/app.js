@@ -24,6 +24,7 @@ import transactionRoutes from "./routes/transaction.routes.js";
 import matchRoutes from "./routes/match.routes.js"
 import paymentRouter from "./routes/payment.routes.js";
 import matchParticipantRouter from './routes/matchparticipant.routes.js';
+import leaderboardRouter from "./routes/leaderboard.routes.js";
 
 //http://localhost:8000/api/v1/users/register
 app.use('/api/v1/users', userRoutes);
@@ -32,7 +33,9 @@ app.use("/api/v1/banners", bannerRoutes);
 app.use("/api/v1/transactions", transactionRoutes);
 app.use("/api/v1/matches", matchRoutes);
 app.use("/api/v1/payments", paymentRouter);
-app.use("/api/v1/match-participants", matchParticipantRouter);
+app.use("/api/v1/match-participants", matchParticipantRouter);leaderboardRouter;
+app.use("/api/v1/leaderboard", leaderboardRouter);
+
 //Error Handling middleware
 app.use((err, req, res, next) => {
   console.error(" 🥺 Error:", err); // Logs the error for debug

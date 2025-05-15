@@ -63,6 +63,18 @@ function MyMatches() {
       return matchList.map((match) => {
          const incomeEstimate = match.perKill * 3;
 
+         // Check if roomId and roomPassword are not empty
+         const showRoomDetails =
+            match.roomId &&
+            match.roomId !== "Empty" &&
+            match.roomPassword &&
+            match.roomPassword !== "Empty";
+
+         // Handle copy to clipboard
+         const handleCopy = (text) => {
+            navigator.clipboard.writeText(text);
+         };
+
          return (
             <div
                key={match._id}
@@ -118,12 +130,39 @@ function MyMatches() {
                      </span>
                   </p>
                </div>
+
+               {showRoomDetails && (
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
+                     <p className="flex items-center justify-between">
+                        <span>
+                           <strong>Room ID:</strong> {match.roomId}
+                        </span>
+                        <button
+                           onClick={() => handleCopy(match.roomId)}
+                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+                        >
+                           Copy
+                        </button>
+                     </p>
+                     <p className="flex items-center justify-between mt-1">
+                        <span>
+                           <strong>Password:</strong> {match.roomPassword}
+                        </span>
+                        <button
+                           onClick={() => handleCopy(match.roomPassword)}
+                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+                        >
+                           Copy
+                        </button>
+                     </p>
+                  </div>
+               )}
             </div>
          );
       });
    };
 
-   const tabs = ["ongoing", "upcoming", "results"];
+   const tabs = ["ongoing", "upcoming", "complete"];
 
    return (
       <div className="max-w-3xl mx-auto mt-10 px-6">

@@ -18,6 +18,7 @@ const registerUser = AsyncHandler(async (req, res) => {
   // Step 1: Extract User Inputs
   const { username, email, password } = req.body;
 
+
   // Step 2: Handle Image Uploads (Before Validation)
   const avatarLocalPath = req.file ? req.file.path : ""; // Store the path in case we need to delete it
   let avatar = null;

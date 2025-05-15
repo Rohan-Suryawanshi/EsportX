@@ -34,15 +34,26 @@ function RegisterPage() {
       setError("");
       setLoading(true);
 
+      if (
+         !formData.username ||
+         !formData.email ||
+         !formData.password ||
+         !formData.avatar
+      ) {
+         setError("All fields are required");
+         setLoading(false);
+         return;
+      }
+
       const formDataToSend = new FormData();
       formDataToSend.append("username", formData.username);
       formDataToSend.append("email", formData.email);
       formDataToSend.append("password", formData.password);
-      if (formData.avatar) formDataToSend.append("avatar", formData.avatar);
+      formDataToSend.append("avatar", formData.avatar);
 
       try {
          const response = await axios.post(
-            "/api/auth/register",
+            "/api/v1/users/register",
             formDataToSend,
             {
                headers: { "Content-Type": "multipart/form-data" },
@@ -59,6 +70,7 @@ function RegisterPage() {
          setLoading(false);
       }
    };
+
 
    return (
       <>
@@ -85,6 +97,7 @@ function RegisterPage() {
                         name="username"
                         placeholder="Username"
                         className="w-full bg-transparent outline-none"
+                        value={formData.username}
                         onChange={handleChange}
                      />
                   </div>
@@ -98,6 +111,7 @@ function RegisterPage() {
                         name="email"
                         placeholder="Email"
                         className="w-full bg-transparent outline-none"
+                        value={formData.email}
                         onChange={handleChange}
                      />
                   </div>
@@ -111,6 +125,7 @@ function RegisterPage() {
                         name="password"
                         placeholder="Password"
                         className="w-full bg-transparent outline-none"
+                        value={formData.password}
                         onChange={handleChange}
                         required
                      />

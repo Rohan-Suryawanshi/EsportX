@@ -12,6 +12,8 @@ const createMatch = AsyncHandler(async (req, res) => {
     map,
     maxPlayers,
     levelCriteria,
+    roomId,
+    roomPassword,
   } = req.body;
 
   console.log(req.body);
@@ -43,6 +45,8 @@ const createMatch = AsyncHandler(async (req, res) => {
     maxPlayers,
     levelCriteria,
     status,
+    roomId: roomId || "Empty",
+    roomPassword: roomPassword || "Empty",
   });
 
   const createdMatch = await newMatch.save();
@@ -55,6 +59,7 @@ const createMatch = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, createdMatch, "Match Created Successfully"));
 });
+
 
 
 const getAllMatches = AsyncHandler(async (req, res) => {
@@ -96,12 +101,12 @@ const getMatchById = AsyncHandler(async (req, res) => {
   }
   res.status(200).json(new ApiResponse(200, match, "Match Fetch Successfully"));
 });
-
 const updateMatchDetails = AsyncHandler(async (req, res) => {
   const matchId = req.params.id;
   if (!matchId) {
     throw new ApiError(400, "Match Id is Required");
   }
+
   const {
     startTime,
     entryFee,
@@ -110,11 +115,11 @@ const updateMatchDetails = AsyncHandler(async (req, res) => {
     map,
     maxPlayers,
     levelCriteria,
+    roomId,
+    roomPassword,
   } = req.body;
 
-  // if (gameId && typeof gameId !== "string") {
-  //   throw new ApiError(400, "Invalid gameId");
-  // }
+  console.log(req.body);
 
   if (startTime && isNaN(new Date(startTime))) {
     throw new ApiError(400, "Invalid startTime");
@@ -155,17 +160,22 @@ const updateMatchDetails = AsyncHandler(async (req, res) => {
         map,
         maxPlayers,
         levelCriteria,
+        roomId,
+        roomPassword,
       },
     },
     { new: true }
   ).populate("gameId");
+
   if (!updatedMatch) {
     throw new ApiError(404, "Match Not Found");
   }
+
   res
     .status(200)
     .json(new ApiResponse(200, updatedMatch, "Match Updated Successfully"));
 });
+
 
 const updateStatusOfMatch = AsyncHandler(async (req, res) => {
   const matchId = req.params.id;

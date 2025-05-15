@@ -28,7 +28,7 @@ function AdminDashboard() {
 
    const handleLogout = () => {
       logout();
-      navigate("/admin-login");
+      navigate("/login");
    };
 
    const renderContent = () => {
