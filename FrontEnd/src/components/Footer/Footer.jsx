@@ -31,12 +31,18 @@ const Footer = () => {
                      </a>
                   </li>
                   <li>
-                     <a href="#" className="hover:text-orange-400 transition">
-                        Tournaments
+                     <a
+                        href="#games"
+                        className="hover:text-orange-400 transition"
+                     >
+                        Games
                      </a>
                   </li>
                   <li>
-                     <a href="#" className="hover:text-orange-400 transition">
+                     <a
+                        href="#howitworks"
+                        className="hover:text-orange-400 transition"
+                     >
                         How It Works
                      </a>
                   </li>

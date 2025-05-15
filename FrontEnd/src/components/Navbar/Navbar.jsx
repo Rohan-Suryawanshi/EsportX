@@ -29,13 +29,13 @@ const Navbar = () => {
             >
                Games
             </Link>
-            <Link
+            {/* <Link
                to="/matches"
                className="hover:text-orange-500"
                onClick={closeMenu}
             >
                Matches
-            </Link>
+            </Link> */}
             <Link
                to="/leaderboard"
                className="hover:text-orange-500"
@@ -93,13 +93,13 @@ const Navbar = () => {
             >
                Games
             </Link>
-            <Link
+            {/* <Link
                to="/matches"
                onClick={closeMenu}
                className="hover:text-orange-500"
             >
                Matches
-            </Link>
+            </Link> */}
             <Link
                to="/leaderboard"
                onClick={closeMenu}

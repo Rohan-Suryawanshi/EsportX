@@ -19,7 +19,7 @@ const games = [
 
 const AvailableGames = () => {
    return (
-      <div className="container mx-auto px-6 py-16 text-center">
+      <div className="container mx-auto px-6 py-16 text-center" id="games">
          <h2 className="text-4xl font-bold text-gray-900 mb-8">
             Available <span className="text-orange-500">Games</span>
          </h2>
@@ -37,7 +37,7 @@ const AvailableGames = () => {
                   <img
                      src={game.image}
                      alt={game.name}
-                     className="w-full h-80 object-cover object-top"
+                     className="w-full h-72 object-cover object-top"
                   />
                   <div className="p-4">
                      <h3 className="text-xl font-semibold">{game.name}</h3>

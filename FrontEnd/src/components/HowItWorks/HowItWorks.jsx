@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const HowItWorks = () => {
    const steps = [
       {
@@ -27,7 +29,10 @@ const HowItWorks = () => {
    ];
 
    return (
-      <section className="container mx-auto text-center py-16 px-6 bg-gray-700 text-white">
+      <section
+         className="container mx-auto text-center py-16 px-6 bg-gray-700 text-white"
+         id="howitworks"
+      >
          <h2 className="text-4xl font-bold text-white mb-6">
             How <span className="text-orange-500">It Works</span>
          </h2>
@@ -52,12 +57,12 @@ const HowItWorks = () => {
             ))}
          </div>
 
-         <a
-            href="#"
+         <Link
+            to="/login"
             className="mt-10 inline-block bg-amber-500 px-7 py-3 rounded-md font-medium text-white hover:bg-amber-600 transition duration-300"
          >
             Join Now!
-         </a>
+         </Link>
       </section>
    );
 };
