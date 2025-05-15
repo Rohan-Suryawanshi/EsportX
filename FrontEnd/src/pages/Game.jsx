@@ -15,7 +15,9 @@ function GamePage() {
    useEffect(() => {
       const fetchMatches = async () => {
          try {
-            const response = await axios.get(`/api/v1/games`);
+            const response = await axios.get(
+               `https://esport-x.vercel.app/api/v1/games`
+            );
             if (response.data.success) {
                setGames(response.data.data);
             }
