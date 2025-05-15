@@ -24,7 +24,7 @@ function AdminGamePage() {
    const fetchGames = async () => {
       try {
          const token = localStorage.getItem("accessToken");
-         const res = await axios.get("/api/v1/games", {
+         const res = await axios.get("https://esport-x.vercel.app/api/v1/games", {
             headers: { Authorization: `Bearer ${token}` },
          });
          setGames(res.data.data);
@@ -54,7 +54,7 @@ function AdminGamePage() {
 
       try {
          if (formMode === "create") {
-            await axios.post("/api/v1/games", form, {
+            await axios.post("https://esport-x.vercel.app/api/v1/games", form, {
                headers: {
                   Authorization: `Bearer ${token}`,
                   "Content-Type": "multipart/form-data",
@@ -62,7 +62,7 @@ function AdminGamePage() {
             });
             setMessage("Game created successfully!");
          } else {
-            await axios.put(`/api/v1/games/${selectedGameId}`, form, {
+            await axios.put(`https://esport-x.vercel.app/api/v1/games/${selectedGameId}`, form, {
                headers: {
                   Authorization: `Bearer ${token}`,
                   "Content-Type": "multipart/form-data",
@@ -81,7 +81,7 @@ function AdminGamePage() {
       if (!window.confirm("Delete this game?")) return;
       const token = localStorage.getItem("accessToken");
       try {
-         await axios.delete(`/api/v1/games/${id}`, {
+         await axios.delete(`https://esport-x.vercel.app/api/v1/games/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
          });
          setGames(games.filter((g) => g._id !== id));

@@ -19,7 +19,7 @@ function MyMatches() {
    useEffect(() => {
       const fetchJoinedMatches = async () => {
          try {
-            const response = await axios.get("/api/v1/users/joined-matches", {
+            const response = await axios.get("https://esport-x.vercel.app/api/v1/users/joined-matches", {
                headers: {
                   Authorization: `Bearer ${token}`,
                   "Content-Type": "application/json",

@@ -17,7 +17,7 @@ function WithdrawBalance() {
    useEffect(() => {
       const fetchUserData = async () => {
          try {
-            const response = await axios.get("/api/v1/users/current-user", {
+            const response = await axios.get("https://esport-x.vercel.app/api/v1/users/current-user", {
                headers: {
                   Authorization: `Bearer ${token}`,
                },
@@ -56,7 +56,7 @@ function WithdrawBalance() {
 
       try {
          const response = await axios.post(
-            "/api/v1/payments",
+            "https://esport-x.vercel.app/api/v1/payments",
             {
                amount: amt,
                upiId: upiId.trim(),

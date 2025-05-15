@@ -40,13 +40,13 @@ export default function TournamentManagement() {
 
    const fetchData = async () => {
       const [matchRes, gameRes] = await Promise.all([
-         axios.get("/api/v1/matches/all-matches", {
+         axios.get("https://esport-x.vercel.app/api/v1/matches/all-matches", {
             headers: {
                Authorization: `Bearer ${token}`,
                "Content-Type": "application/json",
             },
          }),
-         axios.get("/api/v1/games/"),
+         axios.get("https://esport-x.vercel.app/api/v1/games/"),
       ]);
       setMatches(matchRes.data.data);
       setGames(gameRes.data.data);
@@ -56,7 +56,7 @@ export default function TournamentManagement() {
       try {
          if (selectedMatch) {
             await axios.put(
-               `/api/v1/matches/update/${selectedMatch._id}`,
+               `https://esport-x.vercel.app/api/v1/matches/update/${selectedMatch._id}`,
                form,
                {
                   headers: {
@@ -67,7 +67,7 @@ export default function TournamentManagement() {
             );
             alert("Match updated!");
          } else {
-            await axios.post("/api/v1/matches", form);
+            await axios.post("https://esport-x.vercel.app/api/v1/matches", form);
             alert("Match created!");
          }
          setShowForm(false);
@@ -90,7 +90,7 @@ export default function TournamentManagement() {
 
    const handleDelete = async (id) => {
       if (!window.confirm("Are you sure?")) return;
-      await axios.delete(`/api/v1/matches/delete/${id}`, {
+      await axios.delete(`https://esport-x.vercel.app/api/v1/matches/delete/${id}`, {
          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export default function TournamentManagement() {
 
    const handleStatus = async (id, status) => {
       await axios.patch(
-         `/api/v1/matches/status/${id}`,
+         `https://esport-x.vercel.app/api/v1/matches/status/${id}`,
          { status },
          {
             headers: {
@@ -115,7 +115,7 @@ export default function TournamentManagement() {
 
    const handleViewParticipants = async (matchId) => {
       const res = await axios.get(
-         `/api/v1/match-participants/match/${matchId}`,
+         `https://esport-x.vercel.app/api/v1/match-participants/match/${matchId}`,
          {
             headers: {
                Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ export default function TournamentManagement() {
 
    const handleKillUpdate = async (participantId, newKills) => {
       await axios.put(
-         `/api/v1/match-participants/stats/${participantId}`,
+         `https://esport-x.vercel.app/api/v1/match-participants/stats/${participantId}`,
          {
             kills: newKills,
          },
@@ -147,7 +147,7 @@ export default function TournamentManagement() {
 
    const handleRemoveParticipant = async (id) => {
       if (!window.confirm("Remove this participant?")) return;
-      await axios.delete(`/api/v1/match-participants/${id}`, {
+      await axios.delete(`https://esport-x.vercel.app/api/v1/match-participants/${id}`, {
          headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

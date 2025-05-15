@@ -53,7 +53,7 @@ function RegisterPage() {
 
       try {
          const response = await axios.post(
-            "/api/v1/users/register",
+            "https://esport-x.vercel.app/api/v1/users/register",
             formDataToSend,
             {
                headers: { "Content-Type": "multipart/form-data" },

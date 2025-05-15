@@ -13,7 +13,7 @@ function UpdatePassword() {
     setMessage("");
     setError("");
     try {
-      await axios.put("/api/v1/users/change-password", passwordData, {
+      await axios.put("https://esport-x.vercel.app/api/v1/users/change-password", passwordData, {
          withCredentials: true,
       });
       setMessage("Password updated successfully");

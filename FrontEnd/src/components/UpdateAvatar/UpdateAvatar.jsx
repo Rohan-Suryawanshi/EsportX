@@ -44,7 +44,7 @@ function UpdateAvatar() {
 
       try {
          const response = await axios.put(
-            "/api/v1/users/update-image",
+            "https://esport-x.vercel.app/api/v1/users/update-image",
             formData,
             {
                headers: {

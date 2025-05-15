@@ -12,7 +12,7 @@ function MatchesPage() {
       try {
         const queryParams = new URLSearchParams(filters).toString();
         const response = await axios.get(
-           `/api/v1/matches/all-matches?${queryParams}`
+           `https://esport-x.vercel.app/api/v1/matches/all-matches?${queryParams}`
         );
         if (response.data.success) {
           setMatches(response.data.data);

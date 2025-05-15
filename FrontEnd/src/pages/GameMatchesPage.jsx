@@ -24,7 +24,7 @@ function GameMatchesPage() {
    useEffect(() => {
       const fetchMatches = async () => {
          try {
-            const response = await axios.get(`/api/v1/matches/games/${gameId}`);
+            const response = await axios.get(`https://esport-x.vercel.app/api/v1/matches/games/${gameId}`);
             if (response.data.success) {
                setMatches(response.data.data);
             }
@@ -60,7 +60,7 @@ function GameMatchesPage() {
       try {
 
          const response = await axios.post(
-            "/api/v1/match-participants/register",
+            "https://esport-x.vercel.app/api/v1/match-participants/register",
             {
                matchId: selectedMatch._id,
                gameUsername,
@@ -78,7 +78,7 @@ function GameMatchesPage() {
             const fetchUserData = async () => {
                try {
                   const response = await axios.get(
-                     "/api/v1/users/current-user",
+                     "https://esport-x.vercel.app/api/v1/users/current-user",
                      {
                         headers: {
                            Authorization: `Bearer ${token}`,

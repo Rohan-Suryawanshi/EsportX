@@ -7,7 +7,7 @@ const MatchParticipantsModal = ({ matchId, onClose }) => {
 
    const fetchParticipants = async () => {
       try {
-         const res = await axios.get(`/api/matchparticipants/match/${matchId}`);
+         const res = await axios.get(`https://esport-x.vercel.app/api/matchparticipants/match/${matchId}`);
          setParticipants(res.data.data);
       } catch (err) {
          console.error(err);
@@ -18,7 +18,7 @@ const MatchParticipantsModal = ({ matchId, onClose }) => {
 
    const updateKills = async (id, kills) => {
       try {
-         await axios.put(`/api/matchparticipants/${id}/stats`, { kills });
+         await axios.put(`https://esport-x.vercel.app/api/matchparticipants/${id}/stats`, { kills });
          fetchParticipants(); // Refresh
       } catch (err) {
          console.error(err);
@@ -29,7 +29,7 @@ const MatchParticipantsModal = ({ matchId, onClose }) => {
       if (!window.confirm("Are you sure you want to remove this participant?"))
          return;
       try {
-         await axios.delete(`/api/matchparticipants/${id}`);
+         await axios.delete(`https://esport-x.vercel.app/api/matchparticipants/${id}`);
          fetchParticipants();
       } catch (err) {
          console.error(err);

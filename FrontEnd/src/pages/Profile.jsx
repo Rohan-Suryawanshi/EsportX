@@ -36,7 +36,7 @@ function ProfileDashboard() {
       const fetchUserData = async () => {
          try {
             const token = localStorage.getItem("accessToken");
-            const response = await axios.get("/api/v1/users/current-user", {
+            const response = await axios.get("https://esport-x.vercel.app/api/v1/users/current-user", {
                headers: {
                   Authorization: `Bearer ${token}`,
                },

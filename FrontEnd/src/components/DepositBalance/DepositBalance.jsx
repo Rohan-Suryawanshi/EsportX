@@ -41,7 +41,7 @@ const DepositBalance = () => {
       try {
          // Create Razorpay order from backend
          const { data } = await axios.post(
-            "/api/v1/payments/create-order",
+            "https://esport-x.vercel.app/api/v1/payments/create-order",
             { amount: amt * 100 },
             {
                headers: {
@@ -65,7 +65,7 @@ const DepositBalance = () => {
                   console.log("Razorpay Response:", response);
 
                   const verifyRes = await axios.post(
-                     "http://localhost:3000/api/v1/payments/verify-payment",
+                     "http://localhost:3000https://esport-x.vercel.app/api/v1/payments/verify-payment",
                      {
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,

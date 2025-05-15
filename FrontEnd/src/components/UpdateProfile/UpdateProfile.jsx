@@ -27,7 +27,7 @@ function UpdateProfile() {
    const handleProfileUpdate = async () => {
       try {
          const response = await axios.put(
-            "/api/v1/users/update-details",
+            "https://esport-x.vercel.app/api/v1/users/update-details",
             profileData,
             {
                headers: {

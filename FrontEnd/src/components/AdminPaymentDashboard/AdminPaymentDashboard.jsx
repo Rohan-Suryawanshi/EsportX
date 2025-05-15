@@ -20,7 +20,7 @@ const AdminPaymentDashboard = () => {
    const token = localStorage.getItem("accessToken");
    const fetchTransactions = async () => {
       try {
-         const res = await fetch("/api/v1/payments", {
+         const res = await fetch("https://esport-x.vercel.app/api/v1/payments", {
             method: "GET",
             headers: {
                Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ const AdminPaymentDashboard = () => {
 
    const handleStatusUpdate = async (id, action) => {
       try {
-         await fetch(`/api/v1/payments/${id}`, {
+         await fetch(`https://esport-x.vercel.app/api/v1/payments/${id}`, {
             method: "PUT",
             headers: {
                "Content-Type": "application/json",

@@ -14,7 +14,7 @@ function AdminUserManagement() {
       const fetchUsers = async () => {
          try {
             const token = localStorage.getItem("accessToken");
-            const res = await axios.get("/api/v1/users", {
+            const res = await axios.get("https://esport-x.vercel.app/api/v1/users", {
                headers: {
                   Authorization: `Bearer ${token}`,
                },
@@ -34,7 +34,7 @@ function AdminUserManagement() {
       if (!window.confirm("Are you sure you want to delete this user?")) return;
       try {
          const token = localStorage.getItem("accessToken");
-         await axios.delete(`/api/v1/users/${id}`, {
+         await axios.delete(`https://esport-x.vercel.app/api/v1/users/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
          });
          setUsers(users.filter((u) => u._id !== id));
@@ -46,7 +46,7 @@ function AdminUserManagement() {
    const handleView = async (id) => {
       try {
          const token = localStorage.getItem("accessToken");
-         const res = await axios.get(`/api/v1/users/${id}`, {
+         const res = await axios.get(`https://esport-x.vercel.app/api/v1/users/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
          });
          setSelectedUser(res.data.data);

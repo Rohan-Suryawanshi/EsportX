@@ -22,7 +22,7 @@ function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await axios.post("/api/v1/users/login", credentials, {
+      const response = await axios.post("https://esport-x.vercel.app/api/v1/users/login", credentials, {
          withCredentials: true,
       });
       if (response.data) {

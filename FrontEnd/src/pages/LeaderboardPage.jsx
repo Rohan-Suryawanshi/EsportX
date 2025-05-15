@@ -13,7 +13,7 @@ function LeaderboardPage() {
    useEffect(() => {
       const fetchGames = async () => {
          try {
-            const res = await axios.get("/api/v1/games", {
+            const res = await axios.get("https://esport-x.vercel.app/api/v1/games", {
                withCredentials: true,
             });
             setGames(res.data.data);
@@ -32,7 +32,7 @@ function LeaderboardPage() {
          setLoading(true);
          setError("");
          try {
-            const res = await axios.get("/api/v1/leaderboard", {
+            const res = await axios.get("https://esport-x.vercel.app/api/v1/leaderboard", {
                params: { gameId: selectedGameId },
                withCredentials: true,
             });
