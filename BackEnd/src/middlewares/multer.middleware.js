@@ -3,7 +3,8 @@ import { v4 as uuid } from "uuid";
 import path from "path";
 import fs from "fs";
 
-const uploadDir = "./public/temp";
+// const uploadDir = "./public/temp";
+const uploadDir = "/tmp/uploads"; //Changing for the vercel purpose
 
 // Ensure upload directory exists
 if (!fs.existsSync(uploadDir)) {
