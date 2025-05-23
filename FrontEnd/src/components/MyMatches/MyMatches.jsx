@@ -19,12 +19,15 @@ function MyMatches() {
    useEffect(() => {
       const fetchJoinedMatches = async () => {
          try {
-            const response = await axios.get("https://esport-x.vercel.app/api/v1/users/joined-matches", {
-               headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-               },
-            });
+            const response = await axios.get(
+               "https://esport-x.vercel.app/api/v1/users/joined-matches",
+               {
+                  headers: {
+                     Authorization: `Bearer ${token}`,
+                     "Content-Type": "application/json",
+                  },
+               }
+            );
 
             const validMatches = response.data.data.filter(
                (m) => m.matchId !== null
@@ -44,7 +47,7 @@ function MyMatches() {
    const filterMatchesByStatus = (status) => {
       return allJoinedMatches
          .filter((item) => item.matchId?.status === status.toUpperCase())
-         .map((item) => item.matchId); // Extract match details
+         .map((item) => item.matchId);
    };
 
    const renderMatches = (matchList) => {
@@ -62,15 +65,12 @@ function MyMatches() {
 
       return matchList.map((match) => {
          const incomeEstimate = match.perKill * 3;
-
-         // Check if roomId and roomPassword are not empty
          const showRoomDetails =
             match.roomId &&
             match.roomId !== "Empty" &&
             match.roomPassword &&
             match.roomPassword !== "Empty";
 
-         // Handle copy to clipboard
          const handleCopy = (text) => {
             navigator.clipboard.writeText(text);
          };
@@ -78,14 +78,14 @@ function MyMatches() {
          return (
             <div
                key={match._id}
-               className="bg-white p-5 rounded-2xl shadow-md border border-gray-200 mb-5"
+               className="bg-white p-4 sm:p-5 rounded-xl shadow-md border border-gray-200 mb-5"
             >
-               <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-xl font-bold text-gray-800">
+               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-800">
                      {match.gameId?.name || "Match"}
                   </h3>
                   <span
-                     className={`px-3 py-1 rounded-full text-xs font-bold ${
+                     className={`mt-2 sm:mt-0 px-3 py-1 rounded-full text-xs font-bold w-max ${
                         match.status === "ONGOING"
                            ? "bg-yellow-100 text-yellow-600"
                            : match.status === "UPCOMING"
@@ -97,28 +97,30 @@ function MyMatches() {
                   </span>
                </div>
 
-               <div className="grid grid-cols-2 gap-3 text-gray-600 text-sm">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-600 text-sm">
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faCalendarDays} />{" "}
+                     <FontAwesomeIcon icon={faCalendarDays} />
                      {new Date(match.startTime).toLocaleString()}
                   </p>
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faMapLocationDot} /> {match.map}
+                     <FontAwesomeIcon icon={faMapLocationDot} />
+                     {match.map}
                   </p>
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faUser} /> Type: {match.type}
+                     <FontAwesomeIcon icon={faUser} />
+                     Type: {match.type}
                   </p>
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faUsers} />{" "}
+                     <FontAwesomeIcon icon={faUsers} />
                      {match.totalPlayersJoined}/{match.maxPlayers} Joined
                   </p>
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faCoins} /> Entry Fee: ₹
-                     {match.entryFee}
+                     <FontAwesomeIcon icon={faCoins} />
+                     Entry Fee: ₹{match.entryFee}
                   </p>
                   <p className="flex items-center gap-2">
-                     <FontAwesomeIcon icon={faTrophy} /> Per Kill: ₹
-                     {match.perKill}
+                     <FontAwesomeIcon icon={faTrophy} />
+                     Per Kill: ₹{match.perKill}
                   </p>
                </div>
 
@@ -132,29 +134,29 @@ function MyMatches() {
                </div>
 
                {showRoomDetails && (
-                  <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm text-blue-800">
-                     <p className="flex items-center justify-between">
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg text-sm text-blue-800 space-y-2">
+                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <span>
                            <strong>Room ID:</strong> {match.roomId}
                         </span>
                         <button
                            onClick={() => handleCopy(match.roomId)}
-                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow hover:bg-blue-600"
                         >
                            Copy
                         </button>
-                     </p>
-                     <p className="flex items-center justify-between mt-1">
+                     </div>
+                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                         <span>
                            <strong>Password:</strong> {match.roomPassword}
                         </span>
                         <button
                            onClick={() => handleCopy(match.roomPassword)}
-                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+                           className="px-4 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow hover:bg-blue-600"
                         >
                            Copy
                         </button>
-                     </p>
+                     </div>
                   </div>
                )}
             </div>
@@ -165,14 +167,14 @@ function MyMatches() {
    const tabs = ["ongoing", "upcoming", "complete"];
 
    return (
-      <div className="max-w-3xl mx-auto mt-10 px-6">
-         <div className="bg-white p-6 rounded-xl shadow-md">
-            <div className="flex justify-around border-b mb-6">
+      <div className="max-w-4xl mx-auto mt-6 sm:mt-10 px-4 sm:px-6">
+         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+            <div className="flex justify-around border-b mb-6 overflow-x-auto">
                {tabs.map((tab) => (
                   <button
                      key={tab}
                      onClick={() => setActiveTab(tab)}
-                     className={`py-2 px-4 text-lg font-semibold transition-all duration-200 ${
+                     className={`py-2 px-3 sm:px-4 text-base sm:text-lg font-semibold transition-all duration-200 whitespace-nowrap ${
                         activeTab === tab
                            ? "border-b-2 border-blue-500 text-blue-600"
                            : "text-gray-500 hover:text-blue-500"
@@ -182,7 +184,6 @@ function MyMatches() {
                   </button>
                ))}
             </div>
-
             <div>{renderMatches(filterMatchesByStatus(activeTab))}</div>
          </div>
       </div>
