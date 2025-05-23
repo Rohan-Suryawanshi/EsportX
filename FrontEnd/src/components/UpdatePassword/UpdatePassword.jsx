@@ -8,13 +8,15 @@ function UpdatePassword() {
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
+  const token = localStorage.getItem("accessToken");
   const handlePasswordUpdate = async () => {
     setMessage("");
     setError("");
     try {
-      await axios.put("https://esport-x.vercel.app/api/v1/users/change-password", passwordData, {
-         withCredentials: true,
+      await axios.put("https://esport-x.vercel.app/api/v1/users/change-password", passwordData,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setMessage("Password updated successfully");
       setPasswordData({ currentPassword: "", newPassword: "" });

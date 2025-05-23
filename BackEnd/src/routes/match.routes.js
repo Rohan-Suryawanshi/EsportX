@@ -13,14 +13,14 @@ import {
 
 const router = Router();
 
-router.post("/", verifyJWT, createMatch); // Admin only
+router.post("/", verifyJWT,checkAdmin, createMatch); // Admin only
 // router.post("/", createMatch);
 router.get("/all-matches", getAllMatches);
 router.get("/",verifyJWT, getAllMatches);
 router.get("/:id", getMatchById);
-router.put("/update/:id", verifyJWT, updateMatchDetails); // Admin only
-router.patch("/status/:id", verifyJWT, updateStatusOfMatch); // Admin only
-router.delete("/delete/:id", verifyJWT, deleteMatch); // Admin only
+router.put("/update/:id", verifyJWT,checkAdmin, updateMatchDetails); // Admin only
+router.patch("/status/:id", verifyJWT,checkAdmin, updateStatusOfMatch); // Admin only
+router.delete("/delete/:id", verifyJWT,checkAdmin, deleteMatch); // Admin only
 router.get('/games/:id',getSpecificGameMatches);
 
 export default router;
