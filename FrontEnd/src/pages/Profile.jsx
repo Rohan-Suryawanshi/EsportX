@@ -36,11 +36,14 @@ function ProfileDashboard() {
       const fetchUserData = async () => {
          try {
             const token = localStorage.getItem("accessToken");
-            const response = await axios.get("https://esport-x.vercel.app/api/v1/users/current-user", {
-               headers: {
-                  Authorization: `Bearer ${token}`,
-               },
-            });
+            const response = await axios.get(
+               "https://esport-x.vercel.app/api/v1/users/current-user",
+               {
+                  headers: {
+                     Authorization: `Bearer ${token}`,
+                  },
+               }
+            );
             setUser(response.data.data); // This will update context
          } catch {
             setError("Failed to load user data");
@@ -49,9 +52,9 @@ function ProfileDashboard() {
          }
       };
 
-      if (!user) fetchUserData(); // Only fetch if not already available
-      else setLoading(false);
-   }, [setUser, user]);
+      fetchUserData(); // Only fetch if not already available
+      }, [setUser]);
+
 
    const handleLogout = () => {
       logout();
