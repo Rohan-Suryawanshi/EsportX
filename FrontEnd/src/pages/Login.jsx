@@ -22,9 +22,7 @@ function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await axios.post("https://esport-x.vercel.app/api/v1/users/login", credentials, {
-         withCredentials: true,
-      });
+      const response = await axios.post("https://esport-x.vercel.app/api/v1/users/login", credentials);
       if (response.data) {
         console.log(response.data);
        const { user, accessToken, refreshToken } = response.data.data;
