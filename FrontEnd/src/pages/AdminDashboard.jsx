@@ -14,6 +14,7 @@ import {
 
 import Navbar from "../components/Navbar/Navbar";
 import TournamentManagement from "../components/TournamentManagement/TournamentManagement.jsx";
+import Seo from "../components/Seo";
 
 import { UserContext } from "../context/UserContext";
 import AdminPaymentDashboard from "../components/AdminPaymentDashboard/AdminPaymentDashboard.jsx";
@@ -48,6 +49,7 @@ function AdminDashboard() {
 
    return (
       <>
+         <Seo title="Admin Dashboard" description="Administrative dashboard for Esport-X: manage games, payments, tournaments and users." url="/admin-dashboard" />
          <Navbar />
          <div className="flex flex-col md:flex-row min-h-screen">
             <button

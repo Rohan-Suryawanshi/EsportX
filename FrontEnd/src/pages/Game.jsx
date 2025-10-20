@@ -2,6 +2,7 @@ import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Seo from "../components/Seo";
 
 
 const comingSoonGames = [
@@ -30,6 +31,7 @@ function GamePage() {
 
    return (
       <>
+         <Seo title="Games" description="Browse available games on Esport-X and join matches for your favorite titles." url="/games" />
          <Navbar />
          <div className="min-h-screen  p-8">
             <h1 className="text-3xl font-bold text-center mb-8">

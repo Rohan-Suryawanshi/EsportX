@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
    faUser,
@@ -74,6 +75,11 @@ function RegisterPage() {
 
    return (
       <>
+            <Seo
+               title="Register"
+               description="Create an account on Esport-X to join matches, track stats and participate in tournaments."
+               url="/register"
+            />
          <Navbar />
          <div className="min-h-screen flex items-center justify-center px-4">
             <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">

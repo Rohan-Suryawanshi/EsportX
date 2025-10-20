@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/UserContext";
@@ -61,6 +62,11 @@ function LoginPage() {
 
   return (
      <>
+        <Seo
+           title="Login"
+           description="Login to Esport-X to join matches, manage your profile and view leaderboards."
+           url="/login"
+        />
         <Navbar />
         <div className="min-h-screen flex items-center justify-center  px-4">
            <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
