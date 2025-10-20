@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
    faBars,
@@ -89,6 +90,11 @@ function ProfileDashboard() {
 
    return (
       <>
+            <Seo
+               title="Profile"
+               description="Your Esport-X profile: view and manage your account, matches and wallet."
+               url="/profile"
+            />
          <Navbar />
          <div className="flex flex-col md:flex-row min-h-screen">
             <button

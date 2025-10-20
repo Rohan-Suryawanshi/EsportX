@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 
 function LeaderboardPage() {
    const [games, setGames] = useState([]);
@@ -51,6 +52,7 @@ function LeaderboardPage() {
 
    return (
       <>
+         <Seo title="Leaderboard" description="View top players and rankings across games on Esport-X." url="/leaderboard" />
          <Navbar />
          <div className="min-h-screen  py-10 px-4">
             <div className="max-w-4xl mx-auto">

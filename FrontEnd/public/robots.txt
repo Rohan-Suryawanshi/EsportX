@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://esport-x-frontend.vercel.app/sitemap.xml
+Host: esport-x-frontend.vercel.app

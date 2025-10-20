@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 import { UserContext } from "../context/UserContext";
 
 function GameMatchesPage() {
@@ -110,6 +111,7 @@ function GameMatchesPage() {
 
    return (
       <>
+         <Seo title="Game Matches" description="Matches for the selected game on Esport-X." url={`/matches/games/${gameId}`} />
          <Navbar />
          <div className="p-6 md:p-12">
             <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">

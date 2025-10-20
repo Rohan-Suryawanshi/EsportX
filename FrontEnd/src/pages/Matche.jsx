@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar/Navbar";
+import Seo from "../components/Seo";
 
 function MatchesPage() {
   const [matches, setMatches] = useState([]);
@@ -36,6 +37,11 @@ function MatchesPage() {
 
   return (
      <>
+      <Seo
+         title="Matches"
+         description="Available matches on Esport-X — find matches, filters and join."
+         url="/matches"
+      />
         <Navbar />
         <div className="min-h-screen bg-antiquewhite text-black p-4 sm:p-8">
            <h1 className="text-4xl font-extrabold text-center mb-8">

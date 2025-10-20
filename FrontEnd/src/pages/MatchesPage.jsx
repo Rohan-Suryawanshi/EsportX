@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import MatchParticipantsModal from "../components/MatchParticipantsModal";
+import Seo from "../components/Seo";
 
 const MatchesPage = ({ matches }) => {
    const [selectedMatchId, setSelectedMatchId] = useState(null);
 
    return (
       <div className="p-6">
+            <Seo
+               title="Matches"
+               description="Browse upcoming and ongoing matches on Esport-X. Join matches and track participants."
+               url="/matches"
+            />
          <h1 className="text-2xl font-bold">Matches</h1>
          <table className="w-full border mt-4">
             <thead>
