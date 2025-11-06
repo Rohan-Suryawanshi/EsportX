@@ -11,7 +11,8 @@ const pages = [
   '/login',
   '/register',
   '/profile',
-  '/admin-dashboard'
+  '/admin-dashboard',
+  '/landing.html'
 ];
 
 const lastmod = new Date().toISOString().split('T')[0];
