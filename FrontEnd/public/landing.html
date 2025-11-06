@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Esport‑X — Competitive Esports Tournaments, Matches & News</title>
+    <meta name="description" content="Esport-X brings you the best competitive esports tournaments, live matches, team news, and earning opportunities. Join matches, track leaderboards and stay updated with fast news for PUBG, Free Fire, Valorant, and more." />
+    <meta name="keywords" content="esports,esport-x tournaments, live matches, esports news, gaming tournaments, Esport-X" />
+    <link rel="canonical" href="https://esport-x-frontend.vercel.app/landing.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Esport‑X — Competitive Esports Tournaments, Matches & News" />
+    <meta property="og:description" content="Join tournaments, follow live matches, and read daily esports news on Esport‑X. Compete, win and track your progress on leaderboards." />
+    <meta property="og:url" content="https://esport-x-frontend.vercel.app/landing.html" />
+    <meta property="og:image" content="https://esport-x-frontend.vercel.app/Gamer.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@EsportX" />
+
+    <meta name="robots" content="index, follow" />
+
+    <style>
+      body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#0f172a; margin:0; padding:0; background:#f8fafc; }
+      .container { max-width:1000px; margin:48px auto; padding:24px; }
+      header { text-align:center; margin-bottom:32px; }
+      h1 { font-size:2.1rem; margin:0 0 12px; color:#0b1220; }
+      p.lead { color:#475569; font-size:1.05rem; margin:0 0 18px; }
+      .cta { display:inline-block; background:#ff6b35; color:white; padding:12px 20px; border-radius:8px; text-decoration:none; font-weight:600; }
+      section { background:white; padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(12, 18, 20, 0.06); margin-bottom:18px; }
+      .features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+      footer { text-align:center; color:#94a3b8; font-size:0.9rem; margin-top:18px; }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Esport-X",
+      "url": "https://esport-x-frontend.vercel.app/",
+      "logo": "https://esport-x-frontend.vercel.app/Gamer.png",
+      "sameAs": []
+    }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="/Gamer.png" alt="Esport-X" width="120" style="margin-bottom:16px" />
+        <h1>Esport‑X — Compete. Watch. Win.</h1>
+        <p class="lead">Esport‑X is your home for competitive esports tournaments, live match updates, team rosters and leaderboards. Play, compete and earn — fast results, verified payouts.</p>
+        <a class="cta" href="/games">See Available Games & Matches</a>
+      </header>
+
+      <section>
+        <h2>Why Esport‑X?</h2>
+        <p>Esport‑X focuses on delivering real-time tournament information, curated match listings and fair competition. Whether you're a competitive gamer looking to join matches, or a fan tracking live brackets, Esport‑X serves players and watchers with reliable, up-to-date coverage.</p>
+      </section>
+
+      <section>
+        <h2>What You Can Do</h2>
+        <div class="features">
+          <div>
+            <h3>Join Matches</h3>
+            <p>Find upcoming and ongoing matches for popular titles, join quickly and compete for rewards.</p>
+          </div>
+          <div>
+            <h3>Track Leaderboards</h3>
+            <p>Monitor top players and climb the ranks. Leaderboards update in near real-time after matches conclude.</p>
+          </div>
+          <div>
+            <h3>Secure Payments</h3>
+            <p>Fast and secure payment processing for entry fees and rewards — clear transaction history and support.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Trusted by Players</h2>
+        <p>Our platform is built for competitive integrity. We verify match outcomes and protect player funds, giving you peace of mind when you join.</p>
+      </section>
+
+      <footer>
+        <p>&copy; <span id="year"></span> Esport‑X — All rights reserved.</p>
+        <!-- Note: Do not link this landing page from your main React navigation if you don't want it visible in the app UI -->
+      </footer>
+    </div>
+
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </body>
+</html>
